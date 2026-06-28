@@ -16,6 +16,7 @@ import model.CarrelloBean;
 import dao.ProdottoDao;
 import dao.ProdottoDaoImpl;
 import model.Prodotto;
+
 @WebServlet("/catalogo")
 
 public class CatalogoServlet extends HttpServlet {
@@ -43,7 +44,11 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	
 	request.getSession().setAttribute("carrello", cart);
 	loadProductList (request);
-	
+	if (request.getParameter("action") != null) {
+	if (request.getParameter("action").equalsIgnoreCase("vediCarrello")) {
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaCarrello.jsp");
+		dispatcher.forward(request, response);
+	}}
 	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaProdotti.jsp");
 	dispatcher.forward(request, response);
 
@@ -61,45 +66,14 @@ try {
 		}
 		else if (action.equalsIgnoreCase("read")) {
 			leggiProdotto(request);
-		}
-		else if (action.equalsIgnoreCase("delete")) {
-			eliminaProdotto(request);
-		}
-		else if (action.equalsIgnoreCase("aggiungi")) {
-			aggiungiProdotto(request);
-		}
-	}
-}catch (SQLException e) {
-	System.err.println ("Errore "+ e.getMessage());
-}
-}
-
-private void aggiungiProdotto (HttpServletRequest request) throws SQLException{
-	String nome = request.getParameter("nome");
-	String descrizione = request.getParameter ("descrizione");
-	float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-	int quant = Integer.parseInt (request.getParameter("quantita"));
-	boolean attivo = Boolean.parseBoolean(request.getParameter("attivo"));
-	int idCategoria = Integer.parseInt(request.getParameter("idCategoria"));
-	float gradazione = Float.parseFloat(request.getParameter("gradazione"));
-	int formato = Integer.parseInt(request.getParameter("formato"));
-	Prodotto prod = new Prodotto ();
-	prod.setNome(nome);
-	prod.setDescrizione(descrizione);
-	prod.setFormato(formato);
-	prod.setIdCategoria(idCategoria);
-	prod.setGradazione(gradazione);
-	prod.setPrezzo(prezzo);
-	prod.setQuantita(quant);
-	prod.setAttivo(attivo);
-	dao.doSave(prod);
+			}
 	
-}
+		}
+	}catch (SQLException e) {
+	System.err.println ("Errore "+ e.getMessage());
+}}
 
-private void eliminaProdotto (HttpServletRequest request) throws SQLException {
-int codice = Integer.parseInt(request.getParameter("codice"));
-dao.doDelete(codice);
-}
+
 
 private void leggiProdotto( HttpServletRequest request) throws SQLException {
 	int codice = Integer.parseInt(request.getParameter("codice"));
@@ -122,7 +96,7 @@ private void loadProductList (HttpServletRequest request) {
 	try {
 		request.setAttribute("prodotti", dao.doRetrieveAll(sort));
 	}catch(SQLException e) {
-		
+		e.printStackTrace();
 	}
 }
 

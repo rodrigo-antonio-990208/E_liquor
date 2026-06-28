@@ -75,7 +75,17 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			List<Prodotto> prodotti = new LinkedList<> ();
 			String selectSql = "SELECT * FROM " + TABLE_NAME;
 			if (ordine != null && !ordine.isEmpty()) {
-				selectSql += "ORDER BY " + ordine;
+				String str="" ;
+				if (ordine.equalsIgnoreCase("nome")) {
+					str= "nome";
+				}
+				else if (ordine.equalsIgnoreCase("id_prodotto")) {
+					str="id_prodotto";
+				}
+				else if (ordine.equalsIgnoreCase("prezzo")) {
+					str="prezzo_attuale";
+				}
+				selectSql += " ORDER BY " + str;
 			}
 			try (Connection conn = ds.getConnection();
 					PreparedStatement ps = conn.prepareStatement(selectSql);
@@ -85,10 +95,11 @@ public class ProdottoDaoImpl implements ProdottoDao {
 					bean.setIdProdotto (rs.getInt("id_prodotto"));
 					bean.setIdCategoria (rs.getInt("id_categoria"));
 					bean.setNome (rs.getString("nome"));
-					bean.setAttivo (rs.getBoolean("attivo"));
-					bean.setQuantita(rs.getInt("quantità_disponibile"));
+					bean.setAttivo (true);
+					bean.setQuantita(rs.getInt("quantita_disponibile"));
 					bean.setPrezzo(rs.getFloat("prezzo_attuale"));
-					bean.setGradazione(rs.getFloat("formato"));
+					bean.setGradazione(rs.getFloat("gradazione"));
+					bean.setFormato(rs.getInt("formato"));
 					bean.setDescrizione(rs.getString(("descrizione")));
 					bean.setImmagineUrl(rs.getString("immagine_url"));
 					bean.setMimeType(rs.getString("mime_type"));

@@ -28,8 +28,24 @@ public class CarrelloBean implements Serializable {
 		}
 	}
 	
+	public float getPrezzoTotale() {
+		float prezzo = 0;
+		for (Prodotto p : prodotti) {
+			prezzo += p.getPrezzo();
+		}
+		return prezzo;
+	}
+	
 	public List<Prodotto> getProdotti(){
 		return prodotti;
 	}
+	
+	public boolean isEmpty() {
+		if (prodotti.size()==0) {
+			return true;
+		}
+		return false;
+	}
+
 	
 }

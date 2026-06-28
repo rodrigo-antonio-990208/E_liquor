@@ -23,6 +23,26 @@ provincia varchar(50) NOT NULL,
 FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
 );
 
+CREATE TABLE drink
+(
+id_drink int AUTO_INCREMENT PRIMARY KEY,
+nome varchar (50) NOT NULL,
+descrizione TEXT NOT NULL,
+istruzioni TEXT NOT NULL,
+difficoltà int NOT NULL,
+immagine_url varchar (200) DEFAULT NULL,
+mime_type varchar (50) DEFAULT NULL
+);
+
+CREATE TABLE categoria
+(
+id_categoria int AUTO_INCREMENT PRIMARY KEY,
+nome varchar (50) NOT NULL,
+descrizione TEXT NOT NULL,
+immagine_url varchar (200) DEFAULT NULL,
+mime_type varchar (50) DEFAULT NULL
+);
+
 CREATE TABLE ordine(
 id_ordine int AUTO_INCREMENT PRIMARY KEY,
 id_utente int NOT NULL,
@@ -32,6 +52,21 @@ metodo_pagamento varchar (50) NOT NULL,
 totale decimal (10,2) NOT NULL,
 stato varchar(50) DEFAULT 'in elaborazione' ,
 FOREIGN KEY (id_utente) REFERENCES utente(id_utente) ON DELETE CASCADE
+);
+
+CREATE TABLE prodotto(
+id_prodotto int AUTO_INCREMENT PRIMARY KEY,
+id_categoria int NOT NULL,
+nome varchar (50) NOT NULL,
+attivo BOOLEAN DEFAULT true,
+quantita_disponibile int DEFAULT 0,
+prezzo_attuale decimal (10,2) DEFAULT 0.00 NOT NULL,
+gradazione decimal (10,2) NOT NULL,
+descrizione TEXT NOT NULL,
+formato int NOT NULL,
+immagine_url varchar (200) DEFAULT NULL,
+mime_type varchar (50) DEFAULT NULL ,
+FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria) ON DELETE CASCADE
 );
 
 CREATE TABLE dettagli_ordine
@@ -45,29 +80,7 @@ FOREIGN KEY (id_prodotto) REFERENCES prodotto (id_prodotto),
 FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
 );
 
-CREATE TABLE prodotto(
-id_prodotto int AUTO_INCREMENT PRIMARY KEY,
-id_categoria int NOT NULL,
-nome varchar (50) NOT NULL,
-attivo BOOLEAN DEFAULT true,
-quantità_disponibile int DEFAULT 0,
-prezzo_attuale decimal (10,2) DEFAULT 0.00 NOT NULL,
-gradazione decimal (10,2) NOT NULL,
-descrizione TEXT NOT NULL,
-formato int NOT NULL,
-immagine_url varchar (200) DEFAULT NULL,
-mime_type varchar (50) DEFAULT NULL ,
-FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria) ON DELETE CASCADE
-);
 
-CREATE TABLE categoria
-(
-id_categoria int AUTO_INCREMENT PRIMARY KEY,
-nome varchar (50) NOT NULL,
-descrizione TEXT NOT NULL,
-immagine_url varchar (200) DEFAULT NULL,
-mime_type varchar (50) DEFAULT NULL
-);
 
 CREATE TABLE drink_prodotto(
 id_drink int,
@@ -78,13 +91,7 @@ FOREIGN KEY (id_drink) REFERENCES drink (id_drink) ON DELETE CASCADE,
 FOREIGN KEY (id_prodotto) REFERENCES prodotto (id_prodotto) ON DELETE CASCADE
 );
 
-CREATE TABLE drink
-(
-id_drink int AUTO_INCREMENT PRIMARY KEY,
-nome varchar (50) NOT NULL,
-descrizione TEXT NOT NULL,
-istruzioni TEXT NOT NULL,
-difficoltà int NOT NULL,
-immagine_url varchar (200) DEFAULT NULL,
-mime_type varchar (50) DEFAULT NULL
-);
+
+
+INSERT INTO prodotto (nome, descrizione, prezzo_attuale, quantita_disponibile, gradazione, formato) VALUES 
+("beefeater", "ciao", 10.00, 3, 12.00, 70);
