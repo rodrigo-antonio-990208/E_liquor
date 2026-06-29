@@ -10,7 +10,7 @@ cognome varchar (50) NOT NULL,
 email varchar(100) NOT NULL,
 password varchar (300) NOT NULL,
 ruolo varchar (10) DEFAULT 'utente',
-data_registrazione DATETIME DEFAULT CURRENT_TIMESTAMP
+data_registrazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE indirizzo(
@@ -46,7 +46,7 @@ mime_type varchar (50) DEFAULT NULL
 CREATE TABLE ordine(
 id_ordine int AUTO_INCREMENT PRIMARY KEY,
 id_utente int NOT NULL,
-data_ordine DATETIME  DEFAULT CURRENT_TIMESTAMP,
+data_ordine TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
 indirizzo_spedizione varchar (100) NOT NULL,
 metodo_pagamento varchar (50) NOT NULL, 
 totale decimal (10,2) NOT NULL,
