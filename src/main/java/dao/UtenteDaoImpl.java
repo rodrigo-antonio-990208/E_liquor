@@ -49,9 +49,24 @@ public class UtenteDaoImpl implements UtenteDao {
 
 	@Override
 	public UtenteBean doRetrieveByKey(int codice) throws SQLException {
-		return null;
-		// TODO Auto-generated method stub
-		
+		UtenteBean utente = null;
+		String sql = "SELECT * FROM "+ TABLE_NAME+ " WHERE id_utente = ?";
+		try(Connection conn = ds.getConnection();
+				PreparedStatement ps = conn.prepareStatement (sql)){
+			ps.setInt(1, codice);
+		try(ResultSet rs = ps.executeQuery() ){
+			if (rs.next()) {
+				utente = new UtenteBean();
+				utente.setNome(rs.getString("nome"));
+				utente.setCognome(rs.getString("cognome"));
+				utente.setEmail(rs.getString("email"));
+				utente.setPassword(rs.getString("password"));
+				utente.setDataRegistrazione(rs.getTimestamp("data_registrazione"));
+				utente.setIdUtente(rs.getInt("id_utente"));
+				utente.setRuolo(rs.getString("ruolo"));
+			}
+		}}
+	return utente;	
 	}
 
 

@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.sql.Timestamp;
+import java.sql.Date;
 
 public class UtenteBean implements Serializable {
 
