@@ -61,12 +61,14 @@ public class Login extends HttpServlet {
 		else if (utente.getRuolo().equalsIgnoreCase("user")) {
 			request.getSession().setAttribute("ruolo", "user");
 			response.sendRedirect("common/welcome");
-		}}
+		}
 		else  {
 			errors.add("Le credenziali non sono corrette");
-			request.getSession().setAttribute("errors", errors);
+			request.setAttribute("errors", errors);
 			dispatcher.forward(request,response);
-		}}
+		} }
+			}
+		
 		catch (SQLException e) {
 			System.err.println ("errore"+e);
 		}

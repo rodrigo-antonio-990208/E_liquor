@@ -69,7 +69,29 @@ public class UtenteDaoImpl implements UtenteDao {
 	return utente;	
 	}
 
-
+	@Override
+public UtenteBean doRetrieveByMail(String email) throws SQLException{
+	UtenteBean utente = null;
+	String sql = "SELECT * FROM "+TABLE_NAME+" WHERE email = ?";
+	try(Connection conn = ds.getConnection();
+		PreparedStatement ps = conn.prepareStatement(sql);){
+		ps.setString(1, email);
+		try(ResultSet rs = ps.executeQuery()){
+			if (rs.next()) {
+				utente = new UtenteBean();
+				utente.setCognome(rs.getString("cognome"));
+				utente.setNome(rs.getString("nome"));
+				utente.setEmail(rs.getString("email"));
+				utente.setRuolo(rs.getString("ruolo"));
+				utente.setPassword(rs.getString("password"));
+				utente.setIdUtente(rs.getInt("id_utente"));
+				utente.setDataRegistrazione(rs.getTimestamp("data_registrazione"));
+			}
+		}
+	}
+	return utente;
+}
+	
 	@Override
 	public UtenteBean doRetrieveByLogin(String email, String password) throws SQLException {
 		UtenteBean utente = null;

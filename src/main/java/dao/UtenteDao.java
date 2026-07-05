@@ -13,5 +13,7 @@ public interface UtenteDao {
 	
 	public UtenteBean doRetrieveByKey(int codice) throws SQLException;
 		
+	public UtenteBean doRetrieveByMail(String email) throws SQLException;
+	
 	public UtenteBean doRetrieveByLogin(String email, String password) throws SQLException;
 }
