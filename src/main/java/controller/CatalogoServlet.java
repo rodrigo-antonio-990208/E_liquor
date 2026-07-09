@@ -48,6 +48,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	if (request.getParameter("action").equalsIgnoreCase("vediCarrello")) {
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaCarrello.jsp");
 		dispatcher.forward(request, response);
+		return;
 	}}
 	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaProdotti.jsp");
 	dispatcher.forward(request, response);

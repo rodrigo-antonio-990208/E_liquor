@@ -47,5 +47,14 @@ public class CarrelloBean implements Serializable {
 		return false;
 	}
 
+	public int getQuantitaProd (int codice) {
+		int cont =0;
+		for (Prodotto p : prodotti) {
+			if (p.getIdProdotto() == codice) {
+			cont ++;
+			}
+		}
+		return cont;
+	}
 	
 }
