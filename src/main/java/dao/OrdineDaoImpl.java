@@ -32,7 +32,6 @@ public class OrdineDaoImpl implements OrdineDao{
 			ps.setString(1, ordine.getIndirizzo());
 			ps.setString(2,ordine.getPagamento());
 			ps.setFloat(3,ordine.getTotale());
-			ps.setString(4, ordine.getStato());
 			ps.setInt(5, ordine.getIdUtente());
 			ps.executeUpdate();
 			
@@ -56,6 +55,7 @@ public class OrdineDaoImpl implements OrdineDao{
 			try(ResultSet rs = ps.executeQuery()){
 				if (rs.next()) {
 					ordine = new OrdineBean();
+					ordine.setIdOrdine(rs.getInt("id_ordine"));
 					ordine.setData(rs.getTimestamp("data_ordine"));
 					ordine.setIdUtente(rs.getInt("id_utente"));
 					ordine.setIndirizzo(rs.getString("indirizzo_spedizione"));
@@ -68,25 +68,29 @@ public class OrdineDaoImpl implements OrdineDao{
 		return ordine;
 	}
 	
-	public OrdineBean doRetrieveByUser (int codiceUtente) throws SQLException {
+	public List<OrdineBean> doRetrieveByUser (int codiceUtente) throws SQLException {
 		String sql = "SELECT * FROM "+ TABLE_NAME+" WHERE id_utente = ?";
 		OrdineBean ordine= null;
+		List<OrdineBean> ordini = new ArrayList<>();
 		try(Connection conn = ds.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setInt(1, codiceUtente);
 			try(ResultSet rs = ps.executeQuery()){
 				while (rs.next()) {
 					ordine = new OrdineBean();
+					
+					ordine.setIdOrdine(rs.getInt("id_ordine"));
 					ordine.setData(rs.getTimestamp("data_ordine"));
 					ordine.setIdUtente(rs.getInt("id_utente"));
 					ordine.setIndirizzo(rs.getString("indirizzo_spedizione"));
 					ordine.setPagamento(rs.getString("metodo_pagamento"));
 					ordine.setStato(rs.getString("stato"));
 					ordine.setTotale(rs.getFloat("totale"));
+					ordini.add(ordine);
 				}
 			}
 		}
-		return ordine;
+		return ordini;
 	}
 	
 	public List<OrdineBean> doRetrieveAll() throws SQLException{
@@ -97,6 +101,7 @@ public class OrdineDaoImpl implements OrdineDao{
 			try (ResultSet rs = ps.executeQuery()){
 				while (rs.next()) {
 					OrdineBean ordine = new OrdineBean();
+					ordine.setIdOrdine(rs.getInt("id_ordine"));
 					ordine.setData(rs.getTimestamp("data_ordine"));
 					ordine.setIdUtente(rs.getInt("id_utente"));
 					ordine.setIndirizzo(rs.getString("indirizzo_spedizione"));

@@ -13,7 +13,7 @@ public interface OrdineDao {
 	
 	public OrdineBean doRetrieveByKey(int codice) throws SQLException;
 	
-	public OrdineBean doRetrieveByUser(int idUser) throws SQLException;
+	public List<OrdineBean> doRetrieveByUser(int idUser) throws SQLException;
 	
 	public List<OrdineBean> doRetrieveAll()throws SQLException;
 	

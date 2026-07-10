@@ -54,6 +54,8 @@ public class Login extends HttpServlet {
 		try{
 			UtenteBean utente = dao.doRetrieveByLogin(username, digest);
 			if (utente !=null) {
+				request.getSession().setAttribute("utente", utente);
+				
 		if (utente.getRuolo().equalsIgnoreCase("admin")) {
 			request.getSession().setAttribute ("ruolo","admin");
 			response.sendRedirect("admin/welcome");
@@ -61,12 +63,12 @@ public class Login extends HttpServlet {
 		else if (utente.getRuolo().equalsIgnoreCase("user")) {
 			request.getSession().setAttribute("ruolo", "user");
 			response.sendRedirect("common/welcome");
-		}
+		}}
 		else  {
 			errors.add("Le credenziali non sono corrette");
 			request.setAttribute("errors", errors);
 			dispatcher.forward(request,response);
-		} }
+		} 
 			}
 		
 		catch (SQLException e) {

@@ -7,6 +7,7 @@ public class OrdineBean implements Serializable  {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private int idOrdine;
 	private int idUtente;
 	private Timestamp data;
 	private String indirizzo;
@@ -16,6 +17,14 @@ public class OrdineBean implements Serializable  {
 	
 	public OrdineBean() {
 		
+	}
+	
+	public int getIdOrdine() {
+		return idOrdine;
+	}
+	
+	public void setIdOrdine(int i) {
+		idOrdine=i;
 	}
 	
 	public Timestamp getData() {
