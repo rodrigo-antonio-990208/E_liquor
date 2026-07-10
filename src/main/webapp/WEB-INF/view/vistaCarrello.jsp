@@ -9,7 +9,7 @@
 .carrello 
 {border: 1px solid;
 padding: 15px;
-width: 200px;
+width: 700px;
 display: inline-block;			/*ricoda di inserirlo nel foglio css*/
 vertical-align: top; 
 }
@@ -18,8 +18,11 @@ vertical-align: top;
 <meta charset="UTF-8">
 <title>Carrello</title>
 </head>
+<jsp:include page = "header.jsp"/>
 <body>
-<%CarrelloBean carrello = (CarrelloBean) session.getAttribute("carrello");%>
+
+<%CarrelloBean carrello = (CarrelloBean) session.getAttribute("carrello");
+if (carrello != null){%>
 <h2>Carrello</h2>
 <div class="carrello">
 <label >Prodotti: </label>
@@ -33,6 +36,7 @@ for (Prodotto p: lista){%>
 
 <h3>Totale Carrello</h3><br>
 <h2><%=carrello.getPrezzoTotale() %></h2>
+<%} %>
 </div>
 </body>
 </html>

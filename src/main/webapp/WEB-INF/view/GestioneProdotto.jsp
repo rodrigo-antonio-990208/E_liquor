@@ -57,7 +57,7 @@ vertical-align: top; }
 if (prod != null){
 	%>
 <div class="prodotto_card">
-<img src ="Immagini?action=show&codice=<%=prod.getIdProdotto() %>" alt ="<%=prod.getNome()%>"  height ="60" width ="60">
+<img src ="immagini?action=show&codice=<%=prod.getIdProdotto() %>" alt ="<%=prod.getNome()%>"  height ="60" width ="60">
 <h3><%=prod.getNome()%></h3>
 <p><%=prod.getDescrizione()%></p>
 <p><%=prod.getFormato()%> ml</p>
@@ -91,11 +91,9 @@ if (prod != null){
 <label>Categoria</label>
 <select name = "categoria">
 <option value ="1">GIN</option>
-<option value = "2">VODKA</option>
-<option value = "3">RUM</option>
-<option value = "4">TEQUILA</option>
-<option value = "5">WHISKEY</option>
-<option value = "6">LIQUORI</option>
+<option value = "2">TEQUILA</option>
+<option value = "3">WHISKEY</option>
+<option value = "4">LIQUORI</option>
 </select><br>
 
 <label>Prezzo</label>

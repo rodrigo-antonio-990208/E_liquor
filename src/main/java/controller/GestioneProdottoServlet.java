@@ -89,7 +89,14 @@ public class GestioneProdottoServlet extends HttpServlet {
 	}
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		processAction(request);
+		String action = request.getParameter("action");
+		if (action != null && (action.equalsIgnoreCase("aggiungi") || action.equalsIgnoreCase("delete")) ) {
+			processAction(request);
+			response.sendRedirect(request.getContextPath()+"/GestioneProdottoServlet");
+			return;
+		}
+    	
+    	processAction(request);
 		
 		loadProductPage(request);
 		

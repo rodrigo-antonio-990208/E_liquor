@@ -21,7 +21,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 	}
 	
 	public synchronized void doSave (Prodotto prod ) throws SQLException {
-		String insertSQL = "INSERT INTO " + TABLE_NAME + " (nome, descrizione, quantità, prezzo, gradazione, formato, attivo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String insertSQL = "INSERT INTO " + TABLE_NAME + " (nome, descrizione, quantità, prezzo, gradazione, formato, attivo, id_categoria) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (Connection connection = ds.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)){
 			preparedStatement.setString(1, prod.getNome());
@@ -31,6 +31,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			preparedStatement.setFloat(5, prod.getGradazione());
 			preparedStatement.setInt(6, prod.getFormato());
 			preparedStatement.setBoolean(7, prod.isAttivo());
+			preparedStatement.setInt(7, prod.getIdCategoria());
 			preparedStatement.executeUpdate();
 		}		
 	}
@@ -73,7 +74,8 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		
 		public synchronized List <Prodotto> doRetrieveAll (String ordine) throws SQLException{
 			List<Prodotto> prodotti = new LinkedList<> ();
-			String selectSql = "SELECT * FROM " + TABLE_NAME;
+			String selectSql = "SELECT * FROM " + TABLE_NAME+" WHERE attivo = true";
+			
 			if (ordine != null && !ordine.isEmpty()) {
 				String str="" ;
 				if (ordine.equalsIgnoreCase("nome")) {
@@ -85,12 +87,15 @@ public class ProdottoDaoImpl implements ProdottoDao {
 				else if (ordine.equalsIgnoreCase("prezzo")) {
 					str="prezzo_attuale";
 				}
+				
 				selectSql += " ORDER BY " + str;
 			}
+			
 			try (Connection conn = ds.getConnection();
 					PreparedStatement ps = conn.prepareStatement(selectSql);
 				ResultSet rs = ps.executeQuery()){
 				while (rs.next()) {
+				
 					Prodotto bean = new Prodotto();
 					bean.setIdProdotto (rs.getInt("id_prodotto"));
 					bean.setIdCategoria (rs.getInt("id_categoria"));
@@ -109,15 +114,42 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		}
 		
 		public synchronized boolean doDelete(int codice) throws SQLException {
-			String deleteSql = "DELETE FROM " + TABLE_NAME + "WHERE id_prodotto = ?";
+			String deleteSql = "UPDATE  " + TABLE_NAME + " SET attivo = ? WHERE id_prodotto = ?";
 			try(Connection conn = ds.getConnection ();
 					PreparedStatement ps = conn.prepareStatement(deleteSql)){
-				ps.setInt(1,codice);
+				ps.setBoolean(1, false);
+				ps.setInt(2,codice);
 				int risultato = ps.executeUpdate();
 				return risultato != 0;
 			}
 		}
+		
+		public synchronized List <Prodotto> doRetrieveByCategoria (int categoria) throws SQLException{
+			List <Prodotto> prodotti = new LinkedList<>();
+			String sql = "SELECT * FROM "+ TABLE_NAME+ " WHERE id_categoria = ?";
+			try (Connection conn = ds.getConnection();
+					PreparedStatement ps = conn.prepareStatement(sql)){
+				ps.setInt(1, categoria);
+				try(ResultSet rs = ps.executeQuery()){
+					while (rs.next()) {
+						Prodotto bean = new Prodotto();
+						bean.setIdProdotto (rs.getInt("id_prodotto"));
+						bean.setIdCategoria (rs.getInt("id_categoria"));
+						bean.setNome (rs.getString("nome"));
+						bean.setAttivo (true);
+						bean.setQuantita(rs.getInt("quantita_disponibile"));
+						bean.setPrezzo(rs.getFloat("prezzo_attuale"));
+						bean.setGradazione(rs.getFloat("gradazione"));
+						bean.setFormato(rs.getInt("formato"));
+						bean.setDescrizione(rs.getString(("descrizione")));
+						bean.setImmagineUrl(rs.getString("immagine_url"));
+						bean.setMimeType(rs.getString("mime_type"));
+						prodotti.add(bean);
+				}
+			}
+		}
+			return prodotti;
 				
-	}
+	}}
 
 

@@ -15,5 +15,7 @@ public interface ProdottoDao {
 	public Prodotto doRetrieveByKey (int codice) throws SQLException;
 	
 	public Collection <Prodotto> doRetrieveAll (String ordine) throws SQLException;
+	
+	public Collection <Prodotto> doRetrieveByCategoria(int categoria) throws SQLException;
 
 }

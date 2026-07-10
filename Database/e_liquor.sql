@@ -9,7 +9,7 @@ nome varchar (50) NOT NULL,
 cognome varchar (50) NOT NULL,
 email varchar(100) NOT NULL,
 password varchar (300) NOT NULL,
-ruolo varchar (10) DEFAULT 'utente',
+ruolo varchar (10) DEFAULT 'user',
 data_registrazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -23,16 +23,6 @@ provincia varchar(50) NOT NULL,
 FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
 );
 
-CREATE TABLE drink
-(
-id_drink int AUTO_INCREMENT PRIMARY KEY,
-nome varchar (50) NOT NULL,
-descrizione TEXT NOT NULL,
-istruzioni TEXT NOT NULL,
-difficoltà int NOT NULL,
-immagine_url varchar (200) DEFAULT NULL,
-mime_type varchar (50) DEFAULT NULL
-);
 
 CREATE TABLE categoria
 (
@@ -82,14 +72,7 @@ FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
 
 
 
-CREATE TABLE drink_prodotto(
-id_drink int,
-id_prodotto int,
-dosaggio varchar (50) NOT NULL,
-PRIMARY KEY (id_drink, id_prodotto),
-FOREIGN KEY (id_drink) REFERENCES drink (id_drink) ON DELETE CASCADE,
-FOREIGN KEY (id_prodotto) REFERENCES prodotto (id_prodotto) ON DELETE CASCADE
-);
+
 
 
 

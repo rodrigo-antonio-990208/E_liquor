@@ -40,16 +40,24 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 		cart = new CarrelloBean();
 		request.getSession().setAttribute("carrello", cart);
 	}
+	String action = request.getParameter("action");
+	
+	if (action != null && (action.equalsIgnoreCase("addC") || action.equalsIgnoreCase("deleteC"))) {
+	processAction(request,cart);
+	request.getSession().setAttribute("carrello", cart);
+
+	response.sendRedirect(request.getContextPath()+"/catalogo");
+	return;
+	}
 	processAction(request,cart);
 	
-	request.getSession().setAttribute("carrello", cart);
-	loadProductList (request);
 	if (request.getParameter("action") != null) {
 	if (request.getParameter("action").equalsIgnoreCase("vediCarrello")) {
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaCarrello.jsp");
 		dispatcher.forward(request, response);
 		return;
 	}}
+	loadProductList (request);
 	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaProdotti.jsp");
 	dispatcher.forward(request, response);
 
@@ -93,9 +101,16 @@ private void aggiungiCarrello (HttpServletRequest request, CarrelloBean cart) th
 
 private void loadProductList (HttpServletRequest request) {
 	String sort = request.getParameter("sort");
+	String categoria = request.getParameter("categoria");
 	
 	try {
+		if (categoria != null && !categoria.trim().isEmpty()) {
+			request.setAttribute("prodotti", dao.doRetrieveByCategoria(Integer.parseInt(categoria)));
+			
+		}
+		else {
 		request.setAttribute("prodotti", dao.doRetrieveAll(sort));
+		}
 	}catch(SQLException e) {
 		e.printStackTrace();
 	}
