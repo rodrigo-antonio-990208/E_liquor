@@ -121,7 +121,7 @@ public class OrdineDaoImpl implements OrdineDao{
 		List <Integer> i = new ArrayList<>();
 		try(Connection conn = ds.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)){
-		if (!cart.isEmpty() || cart != null) {
+		if (cart != null || !cart.isEmpty()) {
 			for (Prodotto p : cart) {
 				 
 					if (!i.contains(p.getIdProdotto())) {

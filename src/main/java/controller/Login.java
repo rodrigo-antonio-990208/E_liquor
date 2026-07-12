@@ -1,5 +1,6 @@
 package controller;
 
+import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletConfig;
 
+import java.io.*;
 import javax.sql.DataSource;
 
 import dao.UtenteDao;
@@ -37,15 +39,21 @@ public class Login extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	List <String> errors = new ArrayList<>();
+	response.setContentType ("application/json");
+	PrintWriter out = response.getWriter();
+	
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
-	username = validateField(username, "username", errors);
-	password = validateField(password, "password", errors);
-		RequestDispatcher dispatcher = request.getRequestDispatcher ("/WEB-INF/view/Login.jsp");
-		if (!errors.isEmpty()) {
-			request.setAttribute("errors", errors );
-			dispatcher.forward(request, response);
+	
+		JSONObject json = new JSONObject();
+
+			
+			if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+			json.put("status", "error");
+			json.put("message", "compila tutti i campi");
+			
+			out.print(json.toString());
+			
 			return;  /*per non eseuguire il resto del codice*/
 		}
 		
@@ -55,34 +63,33 @@ public class Login extends HttpServlet {
 			UtenteBean utente = dao.doRetrieveByLogin(username, digest);
 			if (utente !=null) {
 				request.getSession().setAttribute("utente", utente);
+				json.put("status", "success");
 				
 		if (utente.getRuolo().equalsIgnoreCase("admin")) {
 			request.getSession().setAttribute ("ruolo","admin");
-			response.sendRedirect("admin/welcome");
+			json.put("redirect", "admin/welcome");
 		}
 		else if (utente.getRuolo().equalsIgnoreCase("user")) {
 			request.getSession().setAttribute("ruolo", "user");
-			response.sendRedirect("common/welcome");
+			json.put("redirect", "common/welcome");
 		}}
+			
 		else  {
-			errors.add("Le credenziali non sono corrette");
-			request.setAttribute("errors", errors);
-			dispatcher.forward(request,response);
+			json.put("status", "error");
+			json.put("message", "nome o password errati");
 		} 
 			}
 		
 		catch (SQLException e) {
 			System.err.println ("errore"+e);
+			
+			json.put("status", "error");
+			json.put("message", "errore interno del server");
 		}
+		
+		out.print(json.toString());
 	}
-	
-	private String validateField (String value , String field, List<String> erros ) {
-		if (value == null || value.trim().isEmpty()){
-			erros.add("il campo "+field +" non puo' essere vuoto");
-			return "";
-		}
-		return value.trim();
-	}
+
 	
 	public static String toDigest (String password) {
 		try {

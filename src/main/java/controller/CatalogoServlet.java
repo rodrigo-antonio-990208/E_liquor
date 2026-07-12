@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import jakarta.servlet.ServletConfig;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import org.json.JSONObject;
 
 import model.CarrelloBean;
 import dao.ProdottoDao;
@@ -35,6 +38,8 @@ public void init (ServletConfig servletConfig) throws ServletException{
 }
 
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	
 	CarrelloBean cart = (CarrelloBean) request.getSession().getAttribute("carrello");
 	if (cart == null) {
 		cart = new CarrelloBean();
@@ -43,12 +48,29 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	String action = request.getParameter("action");
 	
 	if (action != null && (action.equalsIgnoreCase("addC") || action.equalsIgnoreCase("deleteC"))) {
+		
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		
 	processAction(request,cart);
 	request.getSession().setAttribute("carrello", cart);
 
-	response.sendRedirect(request.getContextPath()+"/catalogo");
+	JSONObject json = new JSONObject ();
+	json.put("status","success");
+	
+	if(action.equalsIgnoreCase("addC")) {
+		
+			json.put("message", "Aggiunto al carrello");
+			}
+	else 
+			{json.put("message", "Eliminato dal carrello");
+			}
+	
+	out.write(json.toString());
 	return;
 	}
+	
+	
 	processAction(request,cart);
 	
 	if (request.getParameter("action") != null) {
@@ -111,6 +133,7 @@ private void loadProductList (HttpServletRequest request) {
 		else {
 		request.setAttribute("prodotti", dao.doRetrieveAll(sort));
 		}
+		
 	}catch(SQLException e) {
 		e.printStackTrace();
 	}

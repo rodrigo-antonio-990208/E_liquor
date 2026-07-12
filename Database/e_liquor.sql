@@ -24,14 +24,7 @@ FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
 );
 
 
-CREATE TABLE categoria
-(
-id_categoria int AUTO_INCREMENT PRIMARY KEY,
-nome varchar (50) NOT NULL,
-descrizione TEXT NOT NULL,
-immagine_url varchar (200) DEFAULT NULL,
-mime_type varchar (50) DEFAULT NULL
-);
+
 
 CREATE TABLE ordine(
 id_ordine int AUTO_INCREMENT PRIMARY KEY,
@@ -46,7 +39,7 @@ FOREIGN KEY (id_utente) REFERENCES utente(id_utente) ON DELETE CASCADE
 
 CREATE TABLE prodotto(
 id_prodotto int AUTO_INCREMENT PRIMARY KEY,
-id_categoria int NOT NULL,
+id_categoria varchar (50) NOT NULL,
 nome varchar (50) NOT NULL,
 attivo BOOLEAN DEFAULT true,
 quantita_disponibile int DEFAULT 0,
@@ -55,8 +48,7 @@ gradazione decimal (10,2) NOT NULL,
 descrizione TEXT NOT NULL,
 formato int NOT NULL,
 immagine_url varchar (200) DEFAULT NULL,
-mime_type varchar (50) DEFAULT NULL ,
-FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria) ON DELETE CASCADE
+mime_type varchar (50) DEFAULT NULL 
 );
 
 CREATE TABLE dettagli_ordine

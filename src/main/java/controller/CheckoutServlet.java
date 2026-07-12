@@ -7,10 +7,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import jakarta.servlet.ServletConfig;
 import javax.sql.DataSource;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +22,18 @@ import dao.OrdineDao;
 import dao.UtenteDao;
 import dao.UtenteDaoImpl;
 import dao.OrdineDaoImpl;
+import dao.ProdottoDao;
+import dao.ProdottoDaoImpl;
 import model.UtenteBean;
 import model.OrdineBean;
+import model.Prodotto;
 
 
 @WebServlet("/CheckoutServlet")
 public class CheckoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-     private OrdineDao dao;  
+     private OrdineDao dao; 
+     private ProdottoDao prodotto;
     
 	
   public void init (ServletConfig config) throws ServletException{
@@ -34,6 +41,7 @@ public class CheckoutServlet extends HttpServlet {
 	  DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
 	  if (ds != null) {
 		  dao = new OrdineDaoImpl(ds);
+		  prodotto = new ProdottoDaoImpl(ds);
 	  }
 	  else throw new ServletException("data Source non trovato");
   }
@@ -45,14 +53,30 @@ disp.forward(request, response);
 
 
 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	response.setContentType("application/json");
+	PrintWriter out = response.getWriter();
+	JSONObject json = new JSONObject();
+	List<String> errors = new ArrayList<>();
+	
 	UtenteBean utente = (UtenteBean)request.getSession().getAttribute("utente");
 	if (utente == null) {
-		RequestDispatcher dis2 = request.getRequestDispatcher("/WEB-INF/view/Login.jsp");
-		dis2.forward(request, response);
+	json.put("status", "error");
+	json.put("redirect", "Login.jsp");
+	out.print(json.toString());
+	
 		return;
 		}
-	List <String> errors = new ArrayList<>();
+	
 	CarrelloBean cart = (CarrelloBean) request.getSession().getAttribute("carrello");
+	
+	if (cart == null) {
+		json.put ("status", "error");
+		json.put("message", "il carrello è vuoto");
+		out.print(json.toString());
+		return;
+	}
+	
 	String citta = request.getParameter("citta");
 	String  cap = request.getParameter("cap");
 	String via = request.getParameter("via");
@@ -67,16 +91,32 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	provincia = validate(provincia, "Provincia", errors);
 	pagamento = validate (pagamento, "Metodo di Pagamento", errors);
 	
-	RequestDispatcher dis = request.getRequestDispatcher("/WEB-INF/view/Checkout.jsp");
+	
 	if (!errors.isEmpty()) {
-		request.setAttribute("errors", errors);
-		dis.forward(request,response);
+		json.put("status", "error");
+		json.put("message", String.join("<br>",errors));
+		out.print(json.toString());
 		return;
 	}
 
 	
 	
 	 try {
+		 if (cart != null && cart.getProdotti() != null ) {
+			 
+			 for (Prodotto p : cart.getProdotti()) {
+				 Prodotto dbProd = prodotto.doRetrieveByKey(p.getIdProdotto());
+				 if (dbProd.getQuant() < p.getQuant()) {
+					 json.put("status", "error");
+					 json.put("message", "Quantità inserita non disponibile");
+					 out.print(json.toString());
+					 return;
+				 } }	  }
+		 
+		 for (Prodotto p : cart.getProdotti()) {
+			 prodotto.decrementaQuantità(p.getQuant(), p.getIdProdotto());
+		 }
+		 
 	int id = utente.getIdUtente();
 	String indirizzo = paese+", "+ citta+", "+provincia+", "+cap+", "+via;
 	OrdineBean ordine = new OrdineBean();
@@ -88,10 +128,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	dao.doSaveComposizione(cart, codice);
 	
 	request.getSession().removeAttribute("carrello");
-	response.sendRedirect("Successo");
+	json.put("status", "success");
+	json.put("redirect","Successo");
+	out.print(json.toString());
 	
 	}catch (SQLException e) {
 		System.err.println("errore"+e.getMessage());
+		
+		json.put("status", "error");
+		json.put("message", "problema con il server");
+		out.print(json.toString());
 	}
 
 }

@@ -18,4 +18,5 @@ public interface ProdottoDao {
 	
 	public Collection <Prodotto> doRetrieveByCategoria(int categoria) throws SQLException;
 
+	public void decrementaQuantità (int quant, int codice)throws SQLException;
 }

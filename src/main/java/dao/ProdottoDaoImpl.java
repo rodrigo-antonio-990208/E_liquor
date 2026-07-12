@@ -31,13 +31,13 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			preparedStatement.setFloat(5, prod.getGradazione());
 			preparedStatement.setInt(6, prod.getFormato());
 			preparedStatement.setBoolean(7, prod.isAttivo());
-			preparedStatement.setInt(7, prod.getIdCategoria());
+			preparedStatement.setString(8, prod.getIdCategoria());
 			preparedStatement.executeUpdate();
 		}		
 	}
 	
 	public synchronized boolean doUpdateImage (Prodotto prod) throws SQLException {
-		String sql = "UPDATE" + TABLE_NAME + " SET path = ?, mime_type = ? WHERE code = ?";
+		String sql = "UPDATE " + TABLE_NAME + " SET path = ?, mime_type = ? WHERE code = ?";
 		try (Connection conn = ds.getConnection ();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, prod.getImmagineUrl());
@@ -49,14 +49,14 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		
 		public synchronized Prodotto  doRetrieveByKey(int codice) throws SQLException {
 			Prodotto bean = new Prodotto();
-			String  selectSql = "SELECT * FROM " + TABLE_NAME + "WHERE id_prodotto = ?";
+			String  selectSql = "SELECT * FROM " + TABLE_NAME + " WHERE id_prodotto = ?";
 			try (Connection conn = ds.getConnection();
 					PreparedStatement ps = conn.prepareStatement(selectSql)){
 				ps.setInt(1, codice);
 					try(ResultSet rs = ps.executeQuery()){
 						while (rs.next()) {
 							bean.setIdProdotto (rs.getInt("id_prodotto"));
-							bean.setIdCategoria (rs.getInt("id_categoria"));
+							bean.setIdCategoria (rs.getString("id_categoria"));
 							bean.setNome (rs.getString("nome"));
 							bean.setAttivo (rs.getBoolean("attivo"));
 							bean.setQuantita(rs.getInt("quantità_disponibile"));
@@ -98,7 +98,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 				
 					Prodotto bean = new Prodotto();
 					bean.setIdProdotto (rs.getInt("id_prodotto"));
-					bean.setIdCategoria (rs.getInt("id_categoria"));
+					bean.setIdCategoria (rs.getString("id_categoria"));
 					bean.setNome (rs.getString("nome"));
 					bean.setAttivo (true);
 					bean.setQuantita(rs.getInt("quantita_disponibile"));
@@ -134,7 +134,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 					while (rs.next()) {
 						Prodotto bean = new Prodotto();
 						bean.setIdProdotto (rs.getInt("id_prodotto"));
-						bean.setIdCategoria (rs.getInt("id_categoria"));
+						bean.setIdCategoria (rs.getString("id_categoria"));
 						bean.setNome (rs.getString("nome"));
 						bean.setAttivo (true);
 						bean.setQuantita(rs.getInt("quantita_disponibile"));
@@ -150,6 +150,39 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		}
 			return prodotti;
 				
-	}}
+	}
+		
+		
+		public synchronized void decrementaQuantità (int quant, int codice)throws SQLException {
+			Prodotto p = doRetrieveByKey(codice);
+			String sql;
+			
+				sql= "UPDATE "+ TABLE_NAME+ " SET quantita_disponibile = ? WHERE id_prodotto = ?";
+				try (Connection conn = ds.getConnection();
+						PreparedStatement ps = conn.prepareStatement(sql)){
+					ps.setInt(1,p.getQuant() - quant);
+					ps.setInt(2, codice);
+					ps.executeUpdate();
+						
+			}
+			 if (p.getQuant () <= quant) {
+				sql = "UPDATE  " + TABLE_NAME + " SET attivo = ?  WHERE id_prodotto = ?";
+				try (Connection conn = ds.getConnection();
+						PreparedStatement ps = conn.prepareStatement(sql)){
+					ps.setBoolean(1,false);
+					ps.setInt(2, codice);
+					ps.executeUpdate();
+			}
+		}
+		
+}
+
+
+
+}
+		
+
+
+
 
 

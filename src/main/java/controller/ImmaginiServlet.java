@@ -54,7 +54,7 @@ public class ImmaginiServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws  ServletException, IOException {
 		String action = request.getParameter("action");
-		if (action.equalsIgnoreCase("show")) {
+		if ("show".equalsIgnoreCase(action)) {
 			int codiceProd = Integer.parseInt(request.getParameter("codice"));
 			try {
 			Prodotto prod = dao.doRetrieveByKey(codiceProd);

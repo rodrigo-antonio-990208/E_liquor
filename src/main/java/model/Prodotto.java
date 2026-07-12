@@ -7,7 +7,7 @@ public class Prodotto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int idProdotto;
-	private int idCategoria;
+	private String idCategoria;
 	private String nome;
 	private String descrizione;
 	private boolean attivo;
@@ -21,7 +21,7 @@ public class Prodotto implements Serializable {
 	public  Prodotto() {
 	}
 	
-	public Prodotto(int idProdotto, int idCategoria, float gradazione, String nome, String descrizione, boolean attivo, int quant_disponibile, float prezzo, int formato, String immagineUrl, String mimeType ) {
+	public Prodotto(int idProdotto, String idCategoria, float gradazione, String nome, String descrizione, boolean attivo, int quant_disponibile, float prezzo, int formato, String immagineUrl, String mimeType ) {
 		
 		this.idProdotto = idProdotto;
 		this.idCategoria = idCategoria;
@@ -40,8 +40,8 @@ public class Prodotto implements Serializable {
 		idProdotto = p;
 	}
 	
-	public void setIdCategoria (int c) {
-		idCategoria = c;
+	public void setIdCategoria (String idCategoria2) {
+		idCategoria = idCategoria2;
 	}
 	
 	public void setNome (String n) {
@@ -84,7 +84,7 @@ public class Prodotto implements Serializable {
 		return idProdotto;
 	}
 	
-	public int getIdCategoria() {
+	public String getIdCategoria() {
 		return idCategoria;
 	}
 	

@@ -3,6 +3,8 @@ package controller;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
+import org.json.JSONObject;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import model.Prodotto;
 import dao.ProdottoDao;
@@ -30,18 +33,12 @@ public class GestioneProdottoServlet extends HttpServlet {
 		dao = new ProdottoDaoImpl(ds);
 	}
 	
-	private void processAction (HttpServletRequest request) throws  ServletException{
+	private void  processAction (HttpServletRequest request) throws  ServletException{
 		String action = request.getParameter("action");
 		try {
 		if (action != null) {
-			if (action.equalsIgnoreCase ("aggiungi")) {
-				aggiungiProdotto(request);
-			}
-			else if (action.equalsIgnoreCase("delete")) {
 				
-				eliminaProdotto(request);
-			}
-			else if (action.equalsIgnoreCase("read")) {
+		 if (action.equalsIgnoreCase("read")) {
 				leggiProdotto(request);
 			}
 		}
@@ -49,25 +46,72 @@ public class GestioneProdottoServlet extends HttpServlet {
 		System.err.println("error: "+e.getMessage());
 }}
 	
-	private void aggiungiProdotto (HttpServletRequest request)throws SQLException {
+
+	
+	private JSONObject aggiungiProdotto (HttpServletRequest request)throws SQLException {
+		JSONObject json = new JSONObject();
 		Prodotto prod = new Prodotto ();
+		
 		String nome = request.getParameter("nome");
 		String descrizione = request.getParameter("descrizione");
-		float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-		int quant = Integer.parseInt(request.getParameter("quantita"));
-		float gradazione = Float.parseFloat(request.getParameter("gradazione"));
-		int formato = Integer.parseInt(request.getParameter("formato"));
-		int idCategoria = Integer.parseInt(request.getParameter("categoria"));
+		String prezzo = (request.getParameter("prezzo"));
+		String quant = (request.getParameter("quantita"));
+		String gradazione = (request.getParameter("gradazione"));
+		String formato =(request.getParameter("formato"));
+		String idCategoria = (request.getParameter("categoria"));
+		
+		String errors = "";
+		
+		if (nome == null || nome.trim().isEmpty()) {errors += "il campo Nome non puo' essere vuoto <br>";}
+		if (descrizione == null || descrizione.trim().isEmpty()) {errors += "il campo Descrizione non puo' essere vuoto <br>";}
+		if (prezzo == null || prezzo.trim().isEmpty() ) {errors += "il campo Prezzo non puo' essere vuoto <br>";}
+		if (quant == null || quant.trim().isEmpty()) {errors += "il campo Quantità non puo' essere vuoto <br>";}
+		if (gradazione == null || gradazione.trim().isEmpty()) {errors += "il campo Gradazione non puo' essere vuoto <br>";}
+		if (formato == null || formato.trim().isEmpty()) {errors += "il campo Formato non puo' essere vuoto <br>";}
+		if (idCategoria == null || idCategoria.trim().isEmpty()) {errors += "il campo Categoria non puo' essere vuoto <br>";}
+		
+		if (!errors.isEmpty()) {
+			json.put("status", "error");
+			json.put("message", errors);
+			return json;
+		}
+		try {
+		float price = 	Float.parseFloat(prezzo);
+		int quantity = Integer.parseInt(quant);
+		float grads = Float.parseFloat(gradazione);
+		int form = Integer.parseInt(formato);
+		
+		if (price < 0 || quantity <0) {
+			json.put("status", "error");
+			json.put("message", "prezzo e quantità non possono essere negativi ");
+		return json;
+		}
+		
+		
+		
 		prod.setNome(nome);
 		prod.setDescrizione(descrizione);
-		prod.setPrezzo(prezzo);
-		prod.setQuantita(quant);
-		prod.setGradazione(gradazione);
-		prod.setFormato(formato);
+		prod.setPrezzo(price);
+		prod.setQuantita(quantity);
+		prod.setGradazione(grads);
+		prod.setFormato(form);
 		prod.setIdCategoria(idCategoria);
 		prod.setAttivo(true);
 		dao.doSave(prod);		
-				
+		
+		json.put("status", "success");
+		json.put("redirect",request.getContextPath()+"/GestioneProdottoServlet");
+	
+		}catch (NumberFormatException e) {
+			System.err.println ("errore"+e.getMessage());
+			json.put("status", "error");
+			json.put("message", "inserire numeri validi");
+			
+		}catch (SQLException e) {
+			json.put("status", "error");
+			json.put("message", "errore del server");
+		}
+		return json;
 	}
 	
 	private void eliminaProdotto(HttpServletRequest request) throws SQLException {
@@ -90,12 +134,8 @@ public class GestioneProdottoServlet extends HttpServlet {
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
-		if (action != null && (action.equalsIgnoreCase("aggiungi") || action.equalsIgnoreCase("delete")) ) {
-			processAction(request);
-			response.sendRedirect(request.getContextPath()+"/GestioneProdottoServlet");
-			return;
-		}
-    	
+		
+		
     	processAction(request);
 		
 		loadProductPage(request);
@@ -105,7 +145,34 @@ public class GestioneProdottoServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request,response);
+		PrintWriter out = response.getWriter();
+		JSONObject json = new JSONObject ();
+		response.setContentType("application/json");
+		
+		String action = request.getParameter("action");
+		try {
+		if (action.equalsIgnoreCase("aggiungi")) {
+			json = aggiungiProdotto(request);
+			
+		}
+		
+		else if (action.equalsIgnoreCase("delete")) {
+			eliminaProdotto(request);
+			json.put("status","success");
+			json.put("redirect", request.getContextPath()+"/GestioneProdottoServlet");
+		}
+		else {
+			json.put("status", "error");
+			json.put("message", "azione non riconosciuta");
+		}
+		
+		}catch (SQLException e) {
+			json.put("status", "error");
+			json.put("message", "errore dal server");
+		}
+		
+		out.print(json.toString());
+		
 		
 	}
 
