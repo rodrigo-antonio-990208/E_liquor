@@ -19,6 +19,8 @@ vertical-align: top; }
 <body>
 <jsp:include page = "header.jsp" />
 
+<div class= "actionC"></div>
+
 <div class="sort">
 <h3>Ordina Prodotti Per:</h3>
 <a href ="catalogo?sort=Id_Prodotto"><button style = "margin-right:5px">ID</button></a>
@@ -26,21 +28,24 @@ vertical-align: top; }
 <a href ="catalogo?sort=prezzo"><button style = "margin-right:5px">Prezzo</button></a>
 </div>
 
+
+
 <c:forEach items = "${prodotti}" var= "prod">
 
 <div class = "prodotto_card">
 
-<img src = "immaginiServlet?action=show&codice=${prod.id_prodotto}" alt= "${prod.nome}" width= "60" height="60">
+<img src = "Immagini?action=show&codice=${prod.id_prodotto}" alt= "${prod.nome}" width= "60" height="60">
 
 <h3>${prod.nome}</h3>
 <p>${prod.descrizione}</p>
 <p>${prod.formato} ml</p>
 <p>${prod.prezzo} €</p>
-<a href = "catalogo?action=addC&codice=${prod.id_prodotto}"><button>Aggiungi al carrello</button></a>
+<button onclick = aggiungiCarrello(${prod.id_prodotto})>Aggiungi al carrello</button>
  
  </div>
 </c:forEach>
 
 <jsp:include page= "footer.jsp"/>
+<script src = "scripts/aggiungiCarrello.js"></script>
 </body>
 </html>

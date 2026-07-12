@@ -1,5 +1,3 @@
-
-
 function creaXMLHttpRequest (){
 var request;
 try{
@@ -65,17 +63,17 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 	}
 }}
 
-var regexUsername = /^[a-zA-Z0-9\.\_\-\@]+$/
-var regexPass = /^.{4,}$/
 
+var regexTesto = /^[a-zA-Z0-9\.\@\_\-]+$/;
+var regexPass = /^.{4,}$/;
 
-function validateCampi (campo, regex, errormex){
+function validaCampi (campo, regex, errormex){
 	var value = campo.value.trim();
-	var err = document.getElementById("error-container");
+	var err = document.getElementById("registrazioneError");
+	
 	if (!regex.test(value)){
 		err.innerHTML = errormex;
-		return false;
-	}
+	return false}
 	else {
 		err.innerHTML = "";
 		return true;
@@ -84,44 +82,50 @@ function validateCampi (campo, regex, errormex){
 
 
 window.onload = function (){
-	var user = document.getElementById("username");
-	var pass = document.getElementById("password");
+	var form = document.getElementById ("formRegistrazione");
 	
-	if (user){
-		user.addEventListener("change", function(){validateCampi (user,regexUsername,"il campo Username puo' contenere solo caratteri (a-z, A-Z, 0-9, -, _, @)");});
-	}
-	if (pass){
-		pass.addEventListener ("change", function(){validateCampi(pass,regexPass, "il campo password deve contenere almeno 4 caratteri");});
-	}
-};
+	form.nome.addEventListener("change", function (){ validaCampi(this, regexTesto, "il campo Nome non è valido");});
+	form.cognome.addEventListener("change", function(){ validaCampi(this, regexTesto, "il campo Cognome non è valido");});
+	form.username.addEventListener("change", function(){ validaCampi(this, regexTesto, "il campo Email non è valido");});
+	form.password.addEventListener("change", function(){ validaCampi(this, regexPass, "il campo Password non è valido");});
+} ;
 
-function eseguiLogin(){
-	var error = [];
-	var erroriDoc = document.getElementById("error-container");
-	erroriDoc.innerHTML = ""
+
+
+function registrati (event){
+	if (event){
+		event.preventDefault();
+	}
 	
-	var user = document.getElementById("username").value;
-	var pass = document.getElementById("password").value;
+	var form = document.getElementById("formRegistrazione");
+	var error = document.getElementById("registrazioneError");
+	error.innerHTML = "";
 	
-	if (!regexUsername.test(user)){error.push("il campo username non è valido");}
-	if (!regexPass.test(pass)){error.push ("il campo password non è valido");}
+	var errori = [];
 	
-	if (error.length > 0){
-		erroriDoc.innerHTML = error.join("<br>");
+	if (!regexTesto.test(form.nome.value)) {errori.push("riempire il campo Nome");}
+	if (!regexTesto.test(form.cognome.value)){errori.push("riempire il campo Cognome");}
+	if (!regexTesto.test(form.username.value)){errori.push("riempire il campo Email");}
+	if (!regexPass.test(form.password.value)){errori.push("riempire il campo errori");}
+	
+	if (errori.length > 0){
+		error.innerHTML = errori.join ("<br>");
 		return;
 	}
 	
+	var params = "username="+encodeURIComponent(form.username.value)+"&password="+encodeURIComponent(form.password.value)+"&nome="+encodeURIComponent(form.nome.value)+
+	"&cognome="+encodeURIComponent(form.cognome.value);
 	
-	var params = 'username='+encodeURIComponent(user)+'&password='+encodeURIComponent(pass);
-	
-	loadAjaxDoc("Login","POST",params,handleLogin)
+	loadAjaxDoc("Registrazione", "POST", params, handleReg);
 }
 
-function handleLogin(request){
+function handleReg(request){
 	var response = JSON.parse(request.responseText);
+	var errors = document.getElementById("registrazioneError");
+	
 	if (response.status === "success"){
 		window.location.href = response.redirect;
-	}else {
-		document.getElementById("error-container").innerHTML = response.message;
 	}
+	else 
+		errors.innerHTML = response.message;
 }

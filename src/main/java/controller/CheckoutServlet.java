@@ -16,7 +16,10 @@ import javax.sql.DataSource;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import model.CarrelloBean;
 import dao.OrdineDao;
 import dao.UtenteDao;
@@ -104,19 +107,31 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	 try {
 		 if (cart != null && cart.getProdotti() != null ) {
 			 
+			 Set <Integer> idUnici = new HashSet<>();
+				
 			 for (Prodotto p : cart.getProdotti()) {
-				 Prodotto dbProd = prodotto.doRetrieveByKey(p.getIdProdotto());
-				 if (dbProd.getQuant() < p.getQuant()) {
+				
+					idUnici.add( p.getIdProdotto());
+				
+				 }
+		
+		for (int i : idUnici) {	 
+			 
+				 if (prodotto.doRetrieveByKey(i).getQuant() < cart.getQuantitaProd(i)) {
 					 json.put("status", "error");
 					 json.put("message", "Quantità inserita non disponibile");
 					 out.print(json.toString());
 					 return;
-				 } }	  }
-		 
-		 for (Prodotto p : cart.getProdotti()) {
-			 prodotto.decrementaQuantità(p.getQuant(), p.getIdProdotto());
+				 } }
+		for (int i : idUnici) {
+			prodotto.decrementaQuantità(cart.getQuantitaProd(i), i);
+		}
 		 }
 		 
+	
+		
+		 
+		
 	int id = utente.getIdUtente();
 	String indirizzo = paese+", "+ citta+", "+provincia+", "+cap+", "+via;
 	OrdineBean ordine = new OrdineBean();

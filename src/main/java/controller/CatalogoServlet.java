@@ -127,7 +127,7 @@ private void loadProductList (HttpServletRequest request) {
 	
 	try {
 		if (categoria != null && !categoria.trim().isEmpty()) {
-			request.setAttribute("prodotti", dao.doRetrieveByCategoria(Integer.parseInt(categoria)));
+			request.setAttribute("prodotti", dao.doRetrieveByCategoria(categoria));
 			
 		}
 		else {

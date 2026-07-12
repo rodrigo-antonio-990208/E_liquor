@@ -21,7 +21,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 	}
 	
 	public synchronized void doSave (Prodotto prod ) throws SQLException {
-		String insertSQL = "INSERT INTO " + TABLE_NAME + " (nome, descrizione, quantità, prezzo, gradazione, formato, attivo, id_categoria) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String insertSQL = "INSERT INTO " + TABLE_NAME + " (nome, descrizione, quantita_disponibile, prezzo_attuale, gradazione, formato, attivo, id_categoria) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (Connection connection = ds.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)){
 			preparedStatement.setString(1, prod.getNome());
@@ -37,7 +37,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 	}
 	
 	public synchronized boolean doUpdateImage (Prodotto prod) throws SQLException {
-		String sql = "UPDATE " + TABLE_NAME + " SET path = ?, mime_type = ? WHERE code = ?";
+		String sql = "UPDATE " + TABLE_NAME + " SET immagine_url = ?, mime_type = ? WHERE code = ?";
 		try (Connection conn = ds.getConnection ();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, prod.getImmagineUrl());
@@ -59,7 +59,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 							bean.setIdCategoria (rs.getString("id_categoria"));
 							bean.setNome (rs.getString("nome"));
 							bean.setAttivo (rs.getBoolean("attivo"));
-							bean.setQuantita(rs.getInt("quantità_disponibile"));
+							bean.setQuantita(rs.getInt("quantita_disponibile"));
 							bean.setPrezzo(rs.getFloat("prezzo_attuale"));
 							bean.setGradazione(rs.getFloat("gradazione"));
 							bean.setFormato(rs.getInt("formato"));
@@ -124,12 +124,12 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			}
 		}
 		
-		public synchronized List <Prodotto> doRetrieveByCategoria (int categoria) throws SQLException{
+		public synchronized List <Prodotto> doRetrieveByCategoria (String categoria) throws SQLException{
 			List <Prodotto> prodotti = new LinkedList<>();
 			String sql = "SELECT * FROM "+ TABLE_NAME+ " WHERE id_categoria = ?";
 			try (Connection conn = ds.getConnection();
 					PreparedStatement ps = conn.prepareStatement(sql)){
-				ps.setInt(1, categoria);
+				ps.setString(1, categoria);
 				try(ResultSet rs = ps.executeQuery()){
 					while (rs.next()) {
 						Prodotto bean = new Prodotto();

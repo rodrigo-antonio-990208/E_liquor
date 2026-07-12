@@ -6,7 +6,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.sql.DataSource;
+
+import org.json.JSONObject;
+
 import java.sql.SQLException;
 import jakarta.servlet.ServletConfig;
 import java.util.List;
@@ -42,34 +47,45 @@ public class Registrazione extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<String> errori = new ArrayList<String>();
+		response.setContentType("application/json");
+		
 		String email = request.getParameter("username");
 		String password = request.getParameter("password");
 		String nome = request.getParameter("nome");
 		String cognome = request.getParameter("cognome");
 		
+		JSONObject json = new JSONObject ();
+		PrintWriter out = response.getWriter();
+		
 		email = validateField(email,"username",errori);
 		password = validateField(password, "password", errori);
 		nome = validateField(nome, "nome", errori);
 		cognome = validateField(cognome, "cognome", errori);
-		try {
-			UtenteBean utenteEsistente = dao.doRetrieveByMail(email);
-			if (utenteEsistente != null) {
-				errori.add("L'email inserita è già in uso");
-			}
-		}catch (SQLException e) {
-			System.err.println ("erroe"+e.getMessage());
-		}
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/registrazione.jsp");
 		
 		if (!errori.isEmpty()) {
-			request.setAttribute("errors", errori);
-			dispatcher.forward(request,response);
+			json.put("status", "error");
+			json.put("message", String.join("<br>", errori));
+			out.print(json.toString());
 			return;
 		}
+		
+		
+		try {
+			UtenteBean utenteEsistente = dao.doRetrieveByMail(email);
+			
+			if (utenteEsistente != null) {
+				json.put("status", "error");
+				json.put("message", "utente esistente");
+				out.print(json.toString());
+				return;
+			}
+			
+		
+		
 				
 		String digest = Login.toDigest(password);
-		try {
+	
 			UtenteBean utente = new UtenteBean();
 			utente.setNome(nome);
 			utente.setCognome(cognome);
@@ -79,14 +95,19 @@ public class Registrazione extends HttpServlet {
 			
 			dao.doSave(utente);
 			
-			response.sendRedirect(request.getContextPath()+"/Login");
+			json.put("status", "success");
+			json.put("redirect", request.getContextPath()+"/Login");
+			out.print(json.toString());
 			
 		}catch (SQLException e) {
 			System.err.println("errore durante il salvataggio dell'utente "+e.getMessage());
-			
-			
+			json.put("status", "error");
+			json.put("message","errore comunicazione con il database");
+			out.print(json.toString());
 		}
+		
 	}
+		
 	
 
 	private String validateField (String value, String field, List<String> err) {

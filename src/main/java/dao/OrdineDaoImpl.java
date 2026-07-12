@@ -24,7 +24,7 @@ public class OrdineDaoImpl implements OrdineDao{
 	}
 
 	public int doSave(OrdineBean ordine) throws SQLException {
-		String sql = "INSERT INTO "+TABLE_NAME+" (indirizzo_spedizione, metodo_pagamento, totale, stato, id_utente) VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO "+TABLE_NAME+" (indirizzo_spedizione, metodo_pagamento, totale, id_utente) VALUES (?, ?, ?, ?)";
 		int IdOrdine;
 		try (Connection conn = ds.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -32,7 +32,7 @@ public class OrdineDaoImpl implements OrdineDao{
 			ps.setString(1, ordine.getIndirizzo());
 			ps.setString(2,ordine.getPagamento());
 			ps.setFloat(3,ordine.getTotale());
-			ps.setInt(5, ordine.getIdUtente());
+			ps.setInt(4, ordine.getIdUtente());
 			ps.executeUpdate();
 			
 			try(ResultSet rs = ps.getGeneratedKeys()){

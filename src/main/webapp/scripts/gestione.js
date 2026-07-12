@@ -66,17 +66,70 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 }
 }
 
+var regexTesto  = /^[a-zA-Z0-9\s\'\,\.\-\è\à\é]+$/;
+var regexPrezzo = /^\d+(\.\d{1,2})?$/;
+var regexInteroPositivo = /^\d+$/;
+
+function validaTesto (campo, regex, errorMex){
+	var valore = campo.value.trim();
+	var error = document.getElementById("gestione-error");
+	
+	if (!regex.test(valore)){
+		error.innerHTML = errorMex;
+		return false;
+	}
+	else {
+		error.innerHTML = "";
+		return true;
+	}
+}
+
+window.onload = function(){
+	var form = document.getElementById("formAggiungi");
+	
+	if (form){
+	
+	form.nome.addEventListener("change", function (){validaTesto(this, regexTesto, "il campo Nome non è valido" );});
+	form.descrizione.addEventListener("change",function(){validaTesto(this, regexTesto,"il campo Descrizione non è valido");});
+	form.prezzo.addEventListener("change",function(){validaTesto(this, regexPrezzo,"inserire campo Prezzo con valori decimali");});
+	form.formato.addEventListener("change", function (){validaTesto(this, regexInteroPositivo,"inserire campo Formato con valori interi");})
+	form.gradazione.addEventListener("change", function(){validaTesto(this, regexInteroPositivo,"inserire campo Gradazione con valori interi");})
+	form.quantita.addEventListener("change", function(){validaTesto(this, regexInteroPositivo,"inserire campo Quantità con valori interi");})
+	form.categoria.addEventListener("change", function(){validaTesto(this,regexTesto, "inserire campo categoria");});
+}
+};
+
+
 function aggiungiProdotti(event){
 	if (event){
 		event.preventDefault();
 	}
+	
 	var form = document.getElementById("formAggiungi");
+	var error = document.getElementById("gestione-error");
+	error.innerHTML = "";
+	
+	var errori = [];
+	
+	if (!regexTesto.test(form.nome.value)){errori.push("riempire correttamente il campo Nome");}
+	if (!regexTesto.test(form.descrizione.value)){errori.push("riempire correttamente il campo Descrizione");}
+	if (!regexPrezzo.test(form.prezzo.value)){errori.push("riempire correttamente il campo Prezzo");}
+	if (!regexInteroPositivo.test(form.gradazione.value)){errori.push("riempire correttamente il campo Gradazione");}
+	if (!regexInteroPositivo.test(form.formato.value)){errori.push("riempire correttamente il campo Formato");}
+	if (!regexInteroPositivo.test(form.quantita.value)){errori.push("riempire correttamente il campo Quantità");}
+	if (!regexTesto.test(form.categoria.value)){errori.push("inserire categoria");}
+	
+	if (errori.length > 0){
+		error.innerHTML= errori.join("<br>");
+		return;
+	}
 	
 	var params = "action=aggiungi&nome="+encodeURIComponent(form.nome.value)+"&descrizione="+encodeURIComponent(form.descrizione.value)+"&prezzo="+encodeURIComponent(form.prezzo.value)+
 		"&gradazione="+encodeURIComponent(form.gradazione.value)+"&formato="+encodeURIComponent(form.formato.value)+"&categoria="+encodeURIComponent(form.categoria.value)+"&quantita="+encodeURIComponent(form.quantita.value);
+		
+		
 		loadAjaxDoc("GestioneProdottoServlet","POST",params,handleAggiungi);
 													
-	
 }
 
 
@@ -87,7 +140,7 @@ function handleAggiungi(request){
 	if (response.status === "success"){
 		window.location.href = response.redirect;
 	}else {
-		err.innerHTML(response.message);
+		err.innerHTML = response.message;
 	}
 }
 
