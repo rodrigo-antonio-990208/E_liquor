@@ -1,12 +1,10 @@
-
-
 function creaXMLHttpRequest (){
 var request;
 try{
 	request = new XMLHttpRequest();
 }catch (e){
 	try{
-		request = new ActiveXObject("Msxml2.XMLHTTP"); 
+		 request = new ActiveXObject("Msxml2.XMLHTTP"); 
 	}catch (e){
 		try{
 			request = new ActiveXObject("Microsoft.XMLHTTP");
@@ -66,25 +64,80 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 }
 }
 
-function aggiungiCarrello(codice){
-	var params = "action=addC&codice="+encodeURIComponent(codice);
+var regexNumber = /^\d+$/;
+
+function validaCampi (field , reg, mex){
+	var errField = document.getElementById("gestioneAdmin-error");
+	var value = field.value.trim();
 	
-	loadAjaxDoc(contextPath+"/catalogo","GET", params, handleCarrello);
+	if (!reg.test(value)){
+		errField.innerHTML= mex;
+		return false;
+	}
+	else {
+		errField.innerHTML ="";
+		return true;
+	}
 }
 
-function rimuoviCarrello(codice){
-	var params = "action=deleteC&codice="+encodeURIComponent(codice);
+window.onload = function (){
+	var user = document.getElementById("idUtente");
 	
-	loadAjaxDoc(contextPath+"/catalogo", "GET", params,handleCarrello);
+	if (user){
+		user.addEventListener("change", function(){validaCampi(user,regexNumber, "Inserire correttamente il campo username");});
+	}
+	
+};
+
+function validaUtente(event){
+	
+	var idUtente = document.getElementById("idUtente").value.trim();
+	var error = document.getElementById("gestioneAdmin-error");
+	error.innerHTML = "";
+	
+	if (!regexNumber.test(idUtente)){
+		event.preventDefault();
+		
+		error.innerHTML = "inserire correttamente il campo Id Utente";
+		return false;
+	}
+	return true;
+		
 }
 
-function handleCarrello(request){
+
+
+function validaData(event){
+	
+	var dateX = document.getElementById ("dataX").value;
+	var dateY = document.getElementById("dataY").value;
+	var box = document.getElementById("gestioneAdmin-error");
+	
+	if (!dateX || !dateY){
+		event.preventDefault();
+		box.innerHTML = "inserire entrambe le date";
+		return false ;
+	}
+	
+	if (dateX > dateY){
+		event.preventDefault();
+		box.innerHTML= "la prima data deve essere minore della seconda";
+		return false;
+	}
+	
+	return true;
+}
+
+
+
+
+function handleGestioneOrdini (request){
+	var boxErr = document.getElementById("gestioneAdmin-error");
 	var response = JSON.parse(request.responseText);
 	
 	if (response.status === "success"){
-		document.getElementById("actionC").innerHTML = response.message;
+		boxErr.innerHTML = "";
 	}
-	else {
-		document.getElementById("actionC").innerHTML= "problema con aggiunta/rimozione prodotti";
-	}
+	else boxErr.innerHTML = response.message;
 }
+

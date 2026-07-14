@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter("/*")
-public class Filter extends HttpServlet {
+public class Filter extends HttpFilter {
 	private static final long serialVersionUID = 1L;
 
 	protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain ) throws IOException, ServletException {

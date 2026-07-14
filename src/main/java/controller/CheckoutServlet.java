@@ -32,7 +32,7 @@ import model.OrdineBean;
 import model.Prodotto;
 
 
-@WebServlet("/CheckoutServlet")
+@WebServlet("/common/CheckoutServlet")
 public class CheckoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
      private OrdineDao dao; 
@@ -48,11 +48,16 @@ public class CheckoutServlet extends HttpServlet {
 	  }
 	  else throw new ServletException("data Source non trovato");
   }
+  
+  
 	
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/view/Checkout.jsp");
 disp.forward(request, response);
 	}
+
+
+
 
 
 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,8 +106,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		out.print(json.toString());
 		return;
 	}
-
-	
 	
 	 try {
 		 if (cart != null && cart.getProdotti() != null ) {
@@ -115,39 +118,48 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 				
 				 }
 		
-		for (int i : idUnici) {	 
+			 	for (int i : idUnici) {	 
+			
+			 			Prodotto tmp = prodotto.doRetrieveByKey(i);
 			 
-				 if (prodotto.doRetrieveByKey(i).getQuant() < cart.getQuantitaProd(i)) {
-					 json.put("status", "error");
-					 json.put("message", "Quantità inserita non disponibile");
-					 out.print(json.toString());
-					 return;
-				 } }
-		for (int i : idUnici) {
-			prodotto.decrementaQuantità(cart.getQuantitaProd(i), i);
-		}
-		 }
-		 
+			 					if (tmp == null) {
+			 						json.put("status", "error");
+			 						json.put("message", "un prodotto non è piu' nel carrello");
+			 						out.print(json.toString());
+			 						return;
+			 					}
+			 						if (tmp.getQuant() < cart.getQuantitaProd(i)) {
+			 							json.put("status", "error");
+			 							json.put("message", "Quantità inserita non disponibile");
+			 							out.print(json.toString());
+			 							return;
+			 						} 	 }
+		
+		
+			 	for (int i : idUnici) {
+			 		prodotto.decrementaQuantità(cart.getQuantitaProd(i), i);
+			 	}
 	
-		
-		 
-		
 	int id = utente.getIdUtente();
 	String indirizzo = paese+", "+ citta+", "+provincia+", "+cap+", "+via;
+	
 	OrdineBean ordine = new OrdineBean();
 	ordine.setIdUtente(id);
 	ordine.setIndirizzo(indirizzo);
 	ordine.setPagamento(pagamento);
 	ordine.setTotale(cart.getPrezzoTotale());
 	int codice = dao.doSave(ordine);
+	
 	dao.doSaveComposizione(cart, codice);
 	
 	request.getSession().removeAttribute("carrello");
+	
 	json.put("status", "success");
-	json.put("redirect","Successo");
+	json.put("redirect",request.getContextPath()+"/Successo");
 	out.print(json.toString());
 	
-	}catch (SQLException e) {
+	
+		 }}catch (SQLException e) {
 		System.err.println("errore"+e.getMessage());
 		
 		json.put("status", "error");

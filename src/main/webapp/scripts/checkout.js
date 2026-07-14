@@ -122,7 +122,7 @@ function checkout(){
 	}
 	
 	var params = "paese="+encodeURIComponent(paese.trim())+"&citta="+encodeURIComponent(citta.trim())+"&via="+encodeURIComponent(via.trim())+"&cap="+encodeURIComponent(cap.trim())+"&provincia="+encodeURIComponent(provincia.trim())+"&pagamento="+encodeURIComponent(pagamento.trim());
-	loadAjaxDoc("CheckoutServlet","POST",params,handleCheckout)
+	loadAjaxDoc(contextPath+"/CheckoutServlet","POST",params,handleCheckout)
 }
 
 function handleCheckout(request){
@@ -149,3 +149,4 @@ function mostraCheckout(){
 		btn.style.display = "none";
 	}
 }
+

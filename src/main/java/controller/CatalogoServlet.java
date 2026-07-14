@@ -41,44 +41,48 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	
 	
 	CarrelloBean cart = (CarrelloBean) request.getSession().getAttribute("carrello");
+	
 	if (cart == null) {
 		cart = new CarrelloBean();
 		request.getSession().setAttribute("carrello", cart);
 	}
+	
 	String action = request.getParameter("action");
+	
+	processAction(request,cart);
+	
+	request.setAttribute("carrello", cart);
 	
 	if (action != null && (action.equalsIgnoreCase("addC") || action.equalsIgnoreCase("deleteC"))) {
 		
 		response.setContentType("application/json");
+		JSONObject json = new JSONObject ();
 		PrintWriter out = response.getWriter();
 		
-	processAction(request,cart);
-	request.getSession().setAttribute("carrello", cart);
-
-	JSONObject json = new JSONObject ();
-	json.put("status","success");
 	
-	if(action.equalsIgnoreCase("addC")) {
+		json.put("status","success");
+	
+		if(action.equalsIgnoreCase("addC")) {
 		
 			json.put("message", "Aggiunto al carrello");
 			}
-	else 
+		else 
 			{json.put("message", "Eliminato dal carrello");
 			}
 	
-	out.write(json.toString());
-	return;
-	}
+		out.write(json.toString());
+		return;
+		}
 	
 	
-	processAction(request,cart);
 	
-	if (request.getParameter("action") != null) {
-	if (request.getParameter("action").equalsIgnoreCase("vediCarrello")) {
+		
+	if (action.equalsIgnoreCase("vediCarrello")) {
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaCarrello.jsp");
 		dispatcher.forward(request, response);
 		return;
-	}}
+	}
+	
 	loadProductList (request);
 	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaProdotti.jsp");
 	dispatcher.forward(request, response);
@@ -127,7 +131,7 @@ private void loadProductList (HttpServletRequest request) {
 	
 	try {
 		if (categoria != null && !categoria.trim().isEmpty()) {
-			request.setAttribute("prodotti", dao.doRetrieveByCategoria(categoria));
+			request.setAttribute("prodotti", dao.doRetrieveByCategoria(categoria));  
 			
 		}
 		else {

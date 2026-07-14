@@ -41,7 +41,7 @@ for (Prodotto p: lista){
 	if (!visited.contains (p.getIdProdotto())){
 			visited.add(p.getIdProdotto()); %>	
 	<p>Nome: <%=p.getNome() %></p>
-	<p>Quantità: <%=p.getQuant() %></p>
+	<p>Quantità: <%=carrello.getQuantitaProd(p.getIdProdotto()) %> </p>
 	<p><img src = "Immagini?action=show&codice=<%=p.getIdProdotto()%>" alt = "<%=p.getDescrizione()%>" width = "60" height = "60" >	</p>
 	<p>Prezzo: <%=p.getPrezzo()%> €</p>
 	<button onclick = "rimuoviCarrello(<%=p.getIdProdotto() %>)">Elimina dal carrello</button>
@@ -68,7 +68,7 @@ if (utente != null  && utente.getRuolo().equalsIgnoreCase("user")){
  	
  <% } else {	%>	
 <h3>Per effettuare l'ordine occore effettuare l'accesso</h3>
-<a href = "${pageContext.request.contextPath}/Login"><button>Effettuare il Login</button></a>
+<a href = "${pageContext.request.contextPath}/index"><button>Effettuare il Login</button></a>
 <h3>Non sei registrato ?</h3>
 <a href = "${pageContext.request.contextPath}/Registrazione"><button>Registarti</button></a>
 

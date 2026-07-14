@@ -101,7 +101,7 @@ public class ImmaginiServlet extends HttpServlet {
 				}
 			}
 		}
-		response.sendRedirect ("GestioneProdottoServlet");
+		response.sendRedirect (request.getContextPath()+"/admin/GestioneProdottoServlet");
 	}
 
 	private String buildUniqueFileName(Part part) {

@@ -96,7 +96,7 @@ public class Registrazione extends HttpServlet {
 			dao.doSave(utente);
 			
 			json.put("status", "success");
-			json.put("redirect", request.getContextPath()+"/Login");
+			json.put("redirect", request.getContextPath()+"/index");
 			out.print(json.toString());
 			
 		}catch (SQLException e) {

@@ -114,7 +114,7 @@ function eseguiLogin(){
 	
 	var params = 'username='+encodeURIComponent(user)+'&password='+encodeURIComponent(pass);
 	
-	loadAjaxDoc("Login","POST",params,handleLogin)
+	loadAjaxDoc(contextPath+"/Login","POST",params,handleLogin)
 }
 
 function handleLogin(request){

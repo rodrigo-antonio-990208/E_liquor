@@ -1,5 +1,6 @@
 package dao;
 
+import model.*;
 import java.sql.SQLException;
 import java.io.IOException;
 import model.OrdineBean;
@@ -18,4 +19,6 @@ public interface OrdineDao {
 	public List<OrdineBean> doRetrieveAll()throws SQLException;
 	
 	public void doSaveComposizione (CarrelloBean carrello, int idOrdine) throws SQLException;
+	
+	public List<OrdineBean> doRetrieveByDate(String dataX, String dataY) throws SQLException;
 }

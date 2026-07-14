@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrdineBean implements Serializable  {
 	
@@ -14,9 +16,10 @@ public class OrdineBean implements Serializable  {
 	private String pagamento;
 	private float totale;
 	private String stato;
+	List<DettagliOrdineBean> ordineAcquistato;
 	
 	public OrdineBean() {
-		
+		ordineAcquistato = new ArrayList<>();
 	}
 	
 	public int getIdOrdine() {
@@ -72,5 +75,13 @@ public class OrdineBean implements Serializable  {
 	
 	public void setStato(String s) {
 		stato = s;
+	}
+	
+	public void setOrdineAcquistato(List<DettagliOrdineBean> dett) {
+		ordineAcquistato = dett;
+	}
+	
+	public List<DettagliOrdineBean> getAcquisto (){
+		return ordineAcquistato;
 	}
 }

@@ -64,7 +64,7 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 }}
 
 
-var regexTesto = /^[a-zA-Z0-9\.\@\_\-]+$/;
+var regexTesto = /^[a-zA-Z0-9\.\'\_\@\-]+$/;
 var regexPass = /^.{4,}$/;
 
 function validaCampi (campo, regex, errormex){
@@ -106,7 +106,7 @@ function registrati (event){
 	if (!regexTesto.test(form.nome.value)) {errori.push("riempire il campo Nome");}
 	if (!regexTesto.test(form.cognome.value)){errori.push("riempire il campo Cognome");}
 	if (!regexTesto.test(form.username.value)){errori.push("riempire il campo Email");}
-	if (!regexPass.test(form.password.value)){errori.push("riempire il campo errori");}
+	if (!regexPass.test(form.password.value)){errori.push("riempire il campo Password");}
 	
 	if (errori.length > 0){
 		error.innerHTML = errori.join ("<br>");
@@ -116,7 +116,7 @@ function registrati (event){
 	var params = "username="+encodeURIComponent(form.username.value)+"&password="+encodeURIComponent(form.password.value)+"&nome="+encodeURIComponent(form.nome.value)+
 	"&cognome="+encodeURIComponent(form.cognome.value);
 	
-	loadAjaxDoc("Registrazione", "POST", params, handleReg);
+	loadAjaxDoc(contextPath+"/Registrazione", "POST", params, handleReg);
 }
 
 function handleReg(request){

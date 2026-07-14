@@ -128,7 +128,7 @@ function aggiungiProdotti(event){
 		"&gradazione="+encodeURIComponent(form.gradazione.value)+"&formato="+encodeURIComponent(form.formato.value)+"&categoria="+encodeURIComponent(form.categoria.value)+"&quantita="+encodeURIComponent(form.quantita.value);
 		
 		
-		loadAjaxDoc("GestioneProdottoServlet","POST",params,handleAggiungi);
+		loadAjaxDoc(contextPath+"/admin/GestioneProdottoServlet","POST",params,handleAggiungi);
 													
 }
 
@@ -145,10 +145,14 @@ function handleAggiungi(request){
 }
 
 
+
 function deleteProdotto(codice){
 	var del = "action=delete&codice="+encodeURIComponent(codice);
-	loadAjaxDoc("GestioneProdottoServlet","POST",del,HandledeleteProdotto);
+	loadAjaxDoc(contextPath+"/admin/GestioneProdottoServlet","POST",del,HandledeleteProdotto);
 }
+
+
+
 
 function HandledeleteProdotto(request){
 	var response = JSON.parse(request.responseText);

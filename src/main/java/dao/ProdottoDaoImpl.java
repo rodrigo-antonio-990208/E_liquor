@@ -37,7 +37,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 	}
 	
 	public synchronized boolean doUpdateImage (Prodotto prod) throws SQLException {
-		String sql = "UPDATE " + TABLE_NAME + " SET immagine_url = ?, mime_type = ? WHERE code = ?";
+		String sql = "UPDATE " + TABLE_NAME + " SET immagine_url = ?, mime_type = ? WHERE id_prodotto = ?";
 		try (Connection conn = ds.getConnection ();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, prod.getImmagineUrl());
@@ -113,23 +113,41 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		return prodotti;	
 		}
 		
+		
+		
+		
+		
 		public synchronized boolean doDelete(int codice) throws SQLException {
+			
 			String deleteSql = "UPDATE  " + TABLE_NAME + " SET attivo = ? WHERE id_prodotto = ?";
+			
+			
 			try(Connection conn = ds.getConnection ();
 					PreparedStatement ps = conn.prepareStatement(deleteSql)){
+				
 				ps.setBoolean(1, false);
 				ps.setInt(2,codice);
+				
 				int risultato = ps.executeUpdate();
+				
 				return risultato != 0;
 			}
 		}
 		
+		
+		
+		
 		public synchronized List <Prodotto> doRetrieveByCategoria (String categoria) throws SQLException{
+			
 			List <Prodotto> prodotti = new LinkedList<>();
 			String sql = "SELECT * FROM "+ TABLE_NAME+ " WHERE id_categoria = ?";
+			
+			
 			try (Connection conn = ds.getConnection();
 					PreparedStatement ps = conn.prepareStatement(sql)){
+				
 				ps.setString(1, categoria);
+				
 				try(ResultSet rs = ps.executeQuery()){
 					while (rs.next()) {
 						Prodotto bean = new Prodotto();
@@ -154,10 +172,11 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		
 		
 		public synchronized void decrementaQuantità (int quant, int codice)throws SQLException {
-			Prodotto p = doRetrieveByKey(codice);
-			String sql;
 			
-				sql= "UPDATE "+ TABLE_NAME+ " SET quantita_disponibile = ? WHERE id_prodotto = ?";
+			Prodotto p = doRetrieveByKey(codice);
+			String sql= "UPDATE "+ TABLE_NAME+ " SET quantita_disponibile = ? WHERE id_prodotto = ?";
+			
+			
 				try (Connection conn = ds.getConnection();
 						PreparedStatement ps = conn.prepareStatement(sql)){
 					ps.setInt(1,p.getQuant() - quant);

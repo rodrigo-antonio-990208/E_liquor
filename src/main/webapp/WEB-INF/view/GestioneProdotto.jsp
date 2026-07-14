@@ -36,7 +36,7 @@ vertical-align: top; }
 
 <div class = "prodotto_card">
 
-<img src = "immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
+<img src = "Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
 
 <h3>${prod.nome}</h3>
 <p>${prod.descrizione}</p>
@@ -57,7 +57,7 @@ vertical-align: top; }
 if (prod != null){
 	%>
 <div class="prodotto_card">
-<img src ="immagini?action=show&codice=<%=prod.getIdProdotto() %>" alt ="<%=prod.getNome()%>"  height ="60" width ="60">
+<img src ="Immagini?action=show&codice=<%=prod.getIdProdotto() %>" alt ="<%=prod.getNome()%>"  height ="60" width ="60">
 <h3><%=prod.getNome()%></h3>
 <p><%=prod.getDescrizione()%></p>
 <p><%=prod.getFormato()%> ml</p>
@@ -65,10 +65,12 @@ if (prod != null){
 
 </div>
 
-<form method ="post" action ="Immagine" enctype = "multipart/form-data">
+<form method ="post" action ="${pageContext.request.contextPath}/Immagini" enctype = "multipart/form-data">
 <input type ="hidden" name = "action" value = "upload">
 <input type = "hidden" name ="codiceProd" value = "<%=prod.getIdProdotto()%>">
+
 <label for ="immagine"> Carica Immagine</label><br><input type ="file" id =immagine name ="immagine" accept = "image/*">
+
 <input type = "submit" value = "carica">
 </form>
 
@@ -89,11 +91,12 @@ if (prod != null){
 <textarea name ="descrizione" rows="15" cols ="40" placeholder ="inserisci descrizione" required></textarea><br>
 
 <label>Categoria</label>
+
 <select name = "categoria">
-<option value ="1">GIN</option>
-<option value = "2">TEQUILA</option>
-<option value = "3">WHISKEY</option>
-<option value = "4">LIQUORI</option>
+<option value ="gin">GIN</option>
+<option value = "tequila">TEQUILA</option>
+<option value = "whiskey">WHISKEY</option>
+<option value = "liquori">LIQUORI</option>
 </select><br>
 
 <label>Prezzo</label>

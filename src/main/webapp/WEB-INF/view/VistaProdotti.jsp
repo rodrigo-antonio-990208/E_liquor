@@ -34,13 +34,13 @@ vertical-align: top; }
 
 <div class = "prodotto_card">
 
-<img src = "Immagini?action=show&codice=${prod.id_prodotto}" alt= "${prod.nome}" width= "60" height="60">
+<img src = "Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
 
 <h3>${prod.nome}</h3>
 <p>${prod.descrizione}</p>
 <p>${prod.formato} ml</p>
 <p>${prod.prezzo} €</p>
-<button onclick = aggiungiCarrello(${prod.id_prodotto})>Aggiungi al carrello</button>
+<button onclick = "aggiungiCarrello(${prod.idprodotto})">Aggiungi al carrello</button>
  
  </div>
 </c:forEach>

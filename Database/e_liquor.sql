@@ -24,8 +24,6 @@ FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
 );
 
 
-
-
 CREATE TABLE ordine(
 id_ordine int AUTO_INCREMENT PRIMARY KEY,
 id_utente int NOT NULL,
@@ -54,12 +52,12 @@ mime_type varchar (50) DEFAULT NULL
 CREATE TABLE dettagli_ordine
 (
 id_prodotto int ,
-id_utente int ,
+id_ordine int ,
 prezzo_acquisto decimal(10,2) NOT NULL,
 quantità int DEFAULT 1 NOT NULL,
-PRIMARY KEY (id_prodotto, id_utente),
+PRIMARY KEY (id_prodotto, id_ordine),
 FOREIGN KEY (id_prodotto) REFERENCES prodotto (id_prodotto),
-FOREIGN KEY (id_utente) REFERENCES utente (id_utente) ON DELETE CASCADE
+FOREIGN KEY (id_ordine) REFERENCES ordine (id_ordine) ON DELETE CASCADE
 );
 
 

@@ -19,7 +19,7 @@ import model.Prodotto;
 import dao.ProdottoDao;
 import dao.ProdottoDaoImpl;
 
-@WebServlet("/GestioneProdottoServlet")
+@WebServlet("/admin/GestioneProdottoServlet")
 public class GestioneProdottoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	ProdottoDao dao;
@@ -140,7 +140,7 @@ public class GestioneProdottoServlet extends HttpServlet {
 		
 		loadProductPage(request);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/GestioneProdotti.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/GestioneProdotto.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -151,12 +151,12 @@ public class GestioneProdottoServlet extends HttpServlet {
 		
 		String action = request.getParameter("action");
 		try {
-		if (action.equalsIgnoreCase("aggiungi")) {
+		if ("aggiungi".equalsIgnoreCase(action)) {
 			json = aggiungiProdotto(request);
 			
 		}
 		
-		else if (action.equalsIgnoreCase("delete")) {
+		else if ("delete".equalsIgnoreCase(action)) {
 			eliminaProdotto(request);
 			json.put("status","success");
 			json.put("redirect", request.getContextPath()+"/GestioneProdottoServlet");
