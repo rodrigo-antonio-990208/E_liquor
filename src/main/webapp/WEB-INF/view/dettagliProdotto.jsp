@@ -40,13 +40,23 @@ if (prod != null){
 	<p class = "dett-formato">Formato: ${prodotto.formato} ml</p>
 	<p class = "dett-prezzo">${prodotto.prezzo} €</p>
 	<p class = "dett-gradazione">Gradazione: ${prodotto.gradazione} % </p>
-
+	<%if (utente != null && utente.getRuolo().equalsIgnoreCase("admin")){%>
+	
+	<p class ="dett-Quant">Quantità Disponibile: ${prodotto.quant}</p>
+	<p class ="dett-attivo">Attivo: ${prodotto.attivo}</p>
+	
+	<%}%>
 
 		<div class = "dett-azioni">
  		<%if (utente != null && utente.getRuolo().equalsIgnoreCase("user")){%>
 
 		<button onclick= "aggiungiCarrello(${prod.idProdotto})">Aggiungi al Carrello</button> 
-
+		
+		<%}else if (utente!= null && utente.getRuolo().equalsIgnoreCase("admin")){%>
+		
+		<button onclick = "deleteProdotto(${prodotto.idProdotto}})"	>Elimina Prodotto</button>
+		<a href = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet?action=read&codice=${prodotto.idProdotto}">Modifica Prodotto</a>
+		
 		<%} else if (utente == null) {%>
 
 		<button onclick= "avvisoRegistrazione()">Aggiungi al Carrello</button>
@@ -62,7 +72,9 @@ if (prod != null){
 <%} %>
 
 <jsp:include page = "footer.jsp"/>
-<script src ="scripts/aggiungiCarrello.js"></script>
+<script src = "${pageContext.request.contextPath}/scripts/gestione.js"></script>
+
+<script src ="${pageContext.request.contextPath}/scripts/aggiungiCarrello.js"></script>
 
 </body>
 </html>

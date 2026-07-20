@@ -1,4 +1,5 @@
 package model;
+import java.util.Iterator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,12 +21,18 @@ public class CarrelloBean implements Serializable {
 	
 	
 	public void rimuoviProdotto (Prodotto prod) {
-		for (Prodotto p : prodotti) {
-			if (p.getIdProdotto() == prod.getIdProdotto()) {
-				prodotti.remove(p);
-				break;
-			}
+		if (prod == null) {
+			return;
 		}
+		
+		Iterator <Prodotto> it = prodotti.iterator();
+		while (it.hasNext()) {
+			Prodotto p = it.next();
+				if (p.getIdProdotto() == prod.getIdProdotto()) {
+					it.remove();
+				}
+		}
+		
 	}
 	
 	public float getPrezzoTotale() {
@@ -55,6 +62,25 @@ public class CarrelloBean implements Serializable {
 			}
 		}
 		return cont;
+	}
+	
+	public void incrementa (Prodotto prod) {
+		if (prod!= null) {
+			prodotti.add(prod);
+		}
+	}
+	
+	public void decrementa (Prodotto prod) {
+		for (int i = 0; i< prodotti.size(); i++) {
+			if (prodotti.get(i).getIdProdotto() == prod.getIdProdotto()) {
+				prodotti.remove(i);
+				break;
+			}
+		}
+	}
+	
+	public void svuotaCarrello() {
+		prodotti.clear();
 	}
 	
 }

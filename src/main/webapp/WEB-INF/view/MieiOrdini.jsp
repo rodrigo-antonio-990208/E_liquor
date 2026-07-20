@@ -5,13 +5,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel ="stylesheet" type = "text/css" href = "${pageContext.request.contextPath}/styles/style.css">
 <meta charset="UTF-8">
 <title>Miei Ordini</title>
 </head>
 <body>
 <jsp:include page = "header.jsp"/>
-<div>
+
+<div class = "ordini-container">
 <h1>I MIEI ORDINI</h1>
+
 <% List<OrdineBean> ordine = (List<OrdineBean>) request.getAttribute ("ordini"); 
 if (ordine != null && !ordine.isEmpty()){
 %>
@@ -47,7 +50,7 @@ if (ordine != null && !ordine.isEmpty()){
 
 <%}else { %>
 
-<h2>Qui non c'è niente da vedere !</h2>
+<h2 class ="ordine-vuoti">Qui non c'è niente da vedere !</h2>
 
 <%} %>
 </div>

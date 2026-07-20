@@ -347,6 +347,15 @@ margin-bottom:15px;
 	flex-wrap: wrap;
 }
 
+.dett-Quant{
+	font-size: 1.05rem;
+	line-height: 1.6;
+	color: #cccccc;
+	margin: 8px 0;
+	padding-top: 15px;
+	border: none;
+}
+
 .dett-azioni button{
 	background-color: #d4af37;
 	color: #121212;
@@ -719,4 +728,151 @@ margin-bottom:15px;
 
 .btn-reset:hover{
 	background-color: #555;
+}
+
+
+/*MIEI ORDINI*/
+
+
+.ordini-container {
+	padding: 20px;
+	background-color: #121212;
+}
+
+.ordini-container h1{
+	color:#ffffff;
+	border-bottom: 2px solid #d4af37;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+	font-size:28px;
+}
+
+.mieiOrdini{
+	width:100%;
+	border-collapse: collapse;
+	background-color: #1a1a1a;
+	color: #ffffff;
+	border: 1px solid #333;
+}
+
+.mieiOrdini th{
+	background-color: #222222;
+	color: #d4af37;
+	font-weight: bold;
+	text-align:left;
+	padding: 12px 15px;
+	border-bottom:2px solid #444
+}
+
+.mieiOrdini td{
+	padding:15px;
+	border-bottom: 1px solid #333;
+	vertical-align: top;
+	color: #cccccc;
+}
+
+.mieiOrdini td li{
+	margin-bottom: 6px;
+	font-size: 14px;
+	list-style-type:square;
+}
+
+.ordini-vuoti{
+	color: #ff4d4d;
+	text-align:center;
+	margin-top: 50px;
+	font-weight: normal;
+}
+
+
+/*LOGIN*/
+
+
+.login-container{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 20px;
+	background-color: #121212;
+}
+
+.login-box{
+	background-color: #1a1a1a;
+	border: 1px solid #333;
+	padding: 30px;
+	width: 100%;
+	max-width:400px;
+	
+}
+
+.login-box fieldset{
+	border: 1px solid #444;
+	padding: 20px;
+}
+
+.login-box legend{
+	color: #d4af37;
+	font-weight: bold;
+	padding: 0 10px;
+}
+
+.login-box label{
+	display: block;
+	color: #cccccc;
+	margin-top: 15px;
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+.login-box input[type= "text"],
+.login-box input[type = "password"]{
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #444;
+	background-color: #222;
+	color: #fff;
+	
+}
+
+.login-box input:focus{
+	border-color: #d4af37;
+}
+
+.login-box .form-buttons{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 25px;
+}
+
+.btn-login{
+	background-color: #d4af37;
+	color: #121212;
+	border: none;
+	padding: 10px 20px;
+	font-weight: bold;
+	cursor:pointer;
+	width:40%
+}
+
+.btn-login:hover{
+	background-color: #f1c40f;
+}
+
+.login-box .btn-reset{
+	background-color: #444;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	width: 48%;
+}
+
+#error-container:not(:empty){
+	background-color: #721c24;
+	color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	padding: 12px;
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: 14px;
 }

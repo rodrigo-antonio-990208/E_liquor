@@ -66,7 +66,7 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 }
 }
 
-var regexTesto  = /^[a-zA-Z0-9\s\'\,\.\-\è\à\é]+$/;
+var regexTesto  = /^[a-zA-Z0-9\s\'\"\,\.\-\è\à\é]+$/;
 var regexPrezzo = /^\d+(\.\d{1,2})?$/;
 var regexInteroPositivo = /^\d+$/;
 
@@ -125,7 +125,10 @@ function aggiungiProdotti(event){
 		return;
 	}
 	
-	var params = "action=aggiungi&nome="+encodeURIComponent(form.nome.value)+"&descrizione="+encodeURIComponent(form.descrizione.value)+"&prezzo="+encodeURIComponent(form.prezzo.value)+
+	var actionValue = form.action.value;
+	var codiceValue = form.codice.value;
+	
+	var params = "action="+encodeURIComponent(actionValue)+"&codice="+encodeURIComponent(codiceValue)+"&nome="+encodeURIComponent(form.nome.value)+"&descrizione="+encodeURIComponent(form.descrizione.value)+"&prezzo="+encodeURIComponent(form.prezzo.value)+
 		"&gradazione="+encodeURIComponent(form.gradazione.value)+"&formato="+encodeURIComponent(form.formato.value)+"&categoria="+encodeURIComponent(form.categoria.value)+"&quantita="+encodeURIComponent(form.quantita.value);
 		
 		
@@ -139,7 +142,12 @@ function handleAggiungi(request){
 	var err = document.getElementById("gestione-error");
 	
 	if (response.status === "success"){
-		window.location.href = response.redirect;
+		
+		err.innerHTML = "Prodotto aggiunto correttamente"
+		
+		setTimeout(function(){
+		window.location.href = response.redirect;},1000);
+		
 	}else {
 		err.innerHTML = response.message;
 	}
@@ -155,12 +163,12 @@ function deleteProdotto(codice){
 
 
 
-
 function HandledeleteProdotto(request){
 	var response = JSON.parse(request.responseText);
 	var err = document.getElementById("gestione-error");
 	if (response.status ==="success"){
 		window.location.href = response.redirect;
+	
 	}
 	else err.innerHTML=response.message
 }

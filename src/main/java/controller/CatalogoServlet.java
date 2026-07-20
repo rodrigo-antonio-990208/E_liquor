@@ -55,7 +55,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	
 	request.setAttribute("carrello", cart);
 	
-	if (action != null && ("addC".equalsIgnoreCase(action) || "deleteC".equalsIgnoreCase(action))) {
+	if (action != null && ("addC".equalsIgnoreCase(action) || "deleteC".equalsIgnoreCase(action) || "aggiornaCarrello".equalsIgnoreCase(action) || "decrementa".equalsIgnoreCase(action) || "incrementa".equalsIgnoreCase(action))) {
 		
 		response.setContentType("application/json");
 		JSONObject json = new JSONObject ();
@@ -68,9 +68,21 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 		
 			json.put("message", "Aggiunto al carrello");
 			}
-		else 
-			{json.put("message", "Eliminato dal carrello");
+		else if("deleteC".equalsIgnoreCase(action)){
+			json.put("message", "Eliminato dal carrello");
 			}
+		
+		else if ("aggiornaCarrello".equalsIgnoreCase(action)) {
+			json.put("message", "prodotto eliminato dal carrello" );
+		}
+		
+		else if ("incrementa".equalsIgnoreCase(action)) {
+			json.put("message", "prodotto incrementato");
+		}
+		
+		else if ("decrementa".equalsIgnoreCase(action)) {
+			json.put("message", "prodotto decrementato");
+		}
 	
 		out.write(json.toString());
 		
@@ -111,7 +123,16 @@ try {
 		else if ("read".equalsIgnoreCase(action)) {
 			leggiProdotto(request);
 			}
+		else if ("aggiornaCarrello".equalsIgnoreCase(action)) {
+			aggiornaCarrello(request, cart);
+		}
+		else if ("decrementa".equalsIgnoreCase(action)) {
+			decrementa(request, cart);
+		}
 	
+		else if ("incrementa".equalsIgnoreCase(action)) {
+			incrementa(request,cart);
+		}
 		}
 	}catch (SQLException e) {
 	System.err.println ("Errore "+ e.getMessage());
@@ -125,13 +146,28 @@ private void leggiProdotto( HttpServletRequest request) throws SQLException {
 }
 
 private void rimuoviCarrello (HttpServletRequest request, CarrelloBean cart) throws SQLException {
-int codice = Integer.parseInt(request.getParameter("codice"));
-cart.rimuoviProdotto(dao.doRetrieveByKey(codice));
+cart.svuotaCarrello();
+request.getSession().removeAttribute("carrello");
 }
 
 private void aggiungiCarrello (HttpServletRequest request, CarrelloBean cart) throws SQLException {
 	int codice = Integer.parseInt(request.getParameter("codice"));
 	cart.addProdotto(dao.doRetrieveByKey(codice));
+}
+
+private void decrementa(HttpServletRequest request, CarrelloBean cart) throws SQLException {
+	int codice = Integer.parseInt(request.getParameter("codice"));
+	cart.decrementa(dao.doRetrieveByKey(codice));
+}
+
+private void incrementa (HttpServletRequest request, CarrelloBean cart) throws SQLException {
+	int codice = Integer.parseInt(request.getParameter("codice"));
+	cart.incrementa(dao.doRetrieveByKey(codice));
+}
+
+private void aggiornaCarrello(HttpServletRequest request, CarrelloBean cart) throws SQLException {
+	int codice = Integer.parseInt(request.getParameter("codice"));
+	cart.rimuoviProdotto(dao.doRetrieveByKey(codice));
 }
 
 private void loadProductList (HttpServletRequest request) {

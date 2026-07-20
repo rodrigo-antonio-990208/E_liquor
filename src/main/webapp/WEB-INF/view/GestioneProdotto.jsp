@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Catalogo lista liquori per amministratore</title>
+<title>${empty prodotto ? 'Inserisci Nuovo Prodotto' : 'Modifica Prodotto Esistente'}</title>
 
 <style >
 .prodotto_card {border: 1px solid;
@@ -19,103 +19,74 @@ vertical-align: top; }
 </style>
 
 </head>
+
+
+
 <body>
 <jsp:include page = "header.jsp" />
 
-<div class="sort">
-<h3>Ordina Prodotti Per:</h3>
-<a href ="GestioneProdottoServlet?sort=Id_Prodotto"><button style = "margin-right:5px">ID</button></a>
-<a href ="GestioneProdottoServlet?sort=nome"><button style = "margin-right:5px">Nome</button></a>
-<a href ="GestioneProdottoServlet?sort=prezzo"><button style = "margin-right:5px">Prezzo</button></a>
-</div>
+
+
 
 <div>
-<h2>Prodotti</h2>
-
-<c:forEach items = "${prodotti}" var= "prod">
-
-<div class = "prodotto_card">
-
-<img src = "Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
-
-<h3>${prod.nome}</h3>
-<p>${prod.descrizione}</p>
-<p>${prod.formato} ml</p>
-<p>${prod.prezzo} €</p>
-<a href = "GestioneProdottoServlet?action=read&codice=${prod.idProdotto}"><button>Dettagli</button></a>
-<button type ="button" onclick = "deleteProdotto(${prod.idProdotto})">Elimina Prodotto</button>
- 
- </div>
-</c:forEach>
-
-</div>
-
-<div>
-<h2>Dettagli</h2>
-
-<% Prodotto prod = (Prodotto) request.getAttribute ("prodotto");
-if (prod != null){
-	%>
-<div class="prodotto_card">
-<img src ="Immagini?action=show&codice=<%=prod.getIdProdotto() %>" alt ="<%=prod.getNome()%>"  height ="60" width ="60">
-<h3><%=prod.getNome()%></h3>
-<p><%=prod.getDescrizione()%></p>
-<p><%=prod.getFormato()%> ml</p>
-<p><%=prod.getPrezzo()%> €</p>
-<p><%=prod.getQuant()%></p>
-
-</div>
-
-<form method ="post" action ="${pageContext.request.contextPath}/Immagini" enctype = "multipart/form-data">
-<input type ="hidden" name = "action" value = "upload">
-<input type = "hidden" name ="codiceProd" value = "<%=prod.getIdProdotto()%>">
-
-<label for ="immagine"> Carica Immagine</label><br><input type ="file" id =immagine name ="immagine" accept = "image/*">
-
-<input type = "submit" value = "carica">
-</form>
-
-<% } %>
-
-</div>
-
-<div>
-<h2>Aggiungi Prodotto</h2>
+<h2>${empty prodotto ? 'Aggiungi Prodotto' : 'Modifica Prodotto'}</h2>
 
 <form id="formAggiungi" action = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet" method ="post" >
-<input type ="hidden" name ="action" value ="aggiungi">
+<input type ="hidden" name ="action" value ="${empty prodotto ? 'aggiungi' : 'modifica'}">
+<input type ="hidden" name ="codice" value = "${prodotto.idProdotto}">
 
 <div id = "gestione-error"></div>
 
 <label>Nome Prodotto:</label>
-<input type = "text" name = "nome" placeholder = "inserisci nome prodotto" required>
+<input type = "text" name = "nome" value ="${prodotto.nome}" placeholder = "inserisci nome prodotto" required>
 
 <label>Descrizione:</label>
-<textarea name ="descrizione" rows="15" cols ="40" placeholder ="inserisci descrizione" required></textarea><br>
+<textarea name ="descrizione"  rows="15" cols ="40" placeholder ="inserisci descrizione" required>"${prodotto.descrizione}"</textarea><br>
 
 <label>Categoria</label>
 
 <select name = "categoria">
-<option value ="gin">GIN</option>
-<option value = "tequila">TEQUILA</option>
-<option value = "whiskey">WHISKEY</option>
-<option value = "liquori">LIQUORI</option>
+<option value ="gin" ${prodotto.idCategoria == 'gin' ? 'selected' : '' }>GIN</option>
+<option value = "tequila"  ${prodotto.idCategoria == 'tequila' ? 'selected' : '' }>TEQUILA</option>
+<option value = "whiskey"  ${prodotto.idCategoria == 'whiskey' ? 'selected' : '' }>WHISKEY</option>
+<option value = "liquori"  ${prodotto.idCategoria == 'liquori' ? 'selected' : '' }>LIQUORI</option>
 </select><br>
 
 <label>Prezzo</label>
-<input type = "number" step = "0.01" name = "prezzo" placeholder = "inserisci prezzo" required><label>€</label>
+<input type = "number" step = "0.01" name = "prezzo" value = "${prodotto.prezzo}" placeholder = "inserisci prezzo" required><label>€</label>
 
 <label>Quantità</label>
-<input type = "number" min = "0" name = "quantita" placeholder = "inserisci quantità" required>
+<input type = "number" min = "0" name = "quantita" value = "${prodotto.quant}" placeholder = "inserisci quantità" required>
 
 <label>Formato </label>
-<input type = "number" min = "0" name ="formato" placeholder = "inserisci formato" required><label>cl</label>
+<input type = "number" min = "0" name ="formato" value = "${prodotto.formato}" placeholder = "inserisci formato" required><label>cl</label>
  
 <label>Gradazione</label>
-<input type = "number" step = "0.01" name = "gradazione"  placeholder = "inserisci gradazione" required> <label>%</label>
+<input type = "number" step = "0.01" name = "gradazione" value = "${prodotto.gradazione}" placeholder = "inserisci gradazione" required> <label>%</label>
 
+<br><br>
 <input type = "submit" value = "inserisci">
-</form></div>
+</form>
+
+<div class = "upload-box" style ="display: ${empty prodotto ? 'none' : 'block'};">
+	<h3 class = "upload-title"> Aggiungi Foto</h3>
+	
+	<form method = "post" action ="${pageContext.request.contextPath}/Immagini" enctype = "multipart/form-data">
+		<input type ="hidden" name = "action" value ="upload">
+		<input type = "hidden" name = "codiceProd" value ="${prodotto.idProdotto}">
+		
+		<input type ="file" name = "immagine" accept="image/*" class="upload-input">
+		
+		<input type="submit" value = "Carica Nuova Foto" class = "btn-carica-foto">
+		
+	</form>
+
+</div>
+
+<a href = "${pageContext.request.contextPath}/catalogo" class = "btn-annulla" style ="display: ${empty prodotto ? 'none' : 'block'};">Annulla ed esci dalla modifica</a>
+
+</div>
+
 
 <jsp:include page= "footer.jsp"/>
 

@@ -53,11 +53,13 @@ public class GestioneProdottoServlet extends HttpServlet {
 	
 
 	
-	private JSONObject aggiungiProdotto (HttpServletRequest request , HttpServletResponse response)throws SQLException {
+	private JSONObject modificaProdotto (HttpServletRequest request , HttpServletResponse response)throws SQLException {
 	
 		JSONObject json = new JSONObject();
 		Prodotto prod = new Prodotto ();
 		
+		
+		String cod = request.getParameter("codice");
 		String nome = request.getParameter("nome");
 		String descrizione = request.getParameter("descrizione");
 		String prezzo = (request.getParameter("prezzo"));
@@ -65,6 +67,85 @@ public class GestioneProdottoServlet extends HttpServlet {
 		String gradazione = (request.getParameter("gradazione"));
 		String formato =(request.getParameter("formato"));
 		String idCategoria = (request.getParameter("categoria"));
+		
+		String errors = "";
+		
+		if (cod == null || cod.trim().isEmpty()) {errors += "il campo codice è vuoto"; }
+		if (nome == null || nome.trim().isEmpty()) {errors += "il campo Nome non puo' essere vuoto <br>";}
+		if (descrizione == null || descrizione.trim().isEmpty()) {errors += "il campo Descrizione non puo' essere vuoto <br>";}
+		if (prezzo == null || prezzo.trim().isEmpty() ) {errors += "il campo Prezzo non puo' essere vuoto <br>";}
+		if (quant == null || quant.trim().isEmpty()) {errors += "il campo Quantità non puo' essere vuoto <br>";}
+		if (gradazione == null || gradazione.trim().isEmpty()) {errors += "il campo Gradazione non puo' essere vuoto <br>";}
+		if (formato == null || formato.trim().isEmpty()) {errors += "il campo Formato non puo' essere vuoto <br>";}
+		if (idCategoria == null || idCategoria.trim().isEmpty()) {errors += "il campo Categoria non puo' essere vuoto <br>";}
+		
+		if (!errors.isEmpty()) {
+			json.put("status", "error");
+			json.put("message", errors);
+			return json;
+		}
+	
+		try {		
+			
+		float price = 	Float.parseFloat(prezzo);
+		int quantity = Integer.parseInt(quant);
+		float grads = Float.parseFloat(gradazione);
+		int form = Integer.parseInt(formato);
+		int codice = Integer.parseInt(cod);
+		
+		if (price < 0 || quantity < 0) {
+			json.put("status", "error");
+			json.put("message", "prezzo e quantità non possono essere negativi ");
+		return json;
+		}
+		
+		
+		prod.setIdProdotto(codice);
+		prod.setNome(nome);
+		prod.setDescrizione(descrizione);
+		prod.setPrezzo(price);
+		prod.setQuantita(quantity);
+		prod.setGradazione(grads);
+		prod.setFormato(form);
+		prod.setIdCategoria(idCategoria);
+		prod.setAttivo(true);
+		
+		dao.doUpdate(prod);		
+		
+		
+		json.put("redirect",request.getContextPath()+"/admin/GestioneProdottoServlet");
+		json.put("status", "success");
+		
+		}catch (NumberFormatException e) {
+			System.err.println ("errore"+e.getMessage());
+			json.put("status", "error");
+			json.put("message", "inserire numeri validi");
+			
+		}catch (SQLException e) {
+			json.put("status", "error");
+			json.put("message", "errore del server");
+		}
+		
+		
+		return json;
+	}
+	
+	
+	
+	private JSONObject aggiungiProdotto (HttpServletRequest request , HttpServletResponse response)throws SQLException {
+		
+		JSONObject json = new JSONObject();
+		Prodotto prod = new Prodotto ();
+		
+		String cod = request.getParameter("codice");
+		String nome = request.getParameter("nome");
+		String descrizione = request.getParameter("descrizione");
+		String prezzo = (request.getParameter("prezzo"));
+		String quant = (request.getParameter("quantita"));
+		String gradazione = (request.getParameter("gradazione"));
+		String formato =(request.getParameter("formato"));
+		String idCategoria = (request.getParameter("categoria"));
+		
 		
 		String errors = "";
 		
@@ -107,7 +188,8 @@ public class GestioneProdottoServlet extends HttpServlet {
 		
 		
 		json.put("redirect",request.getContextPath()+"/admin/GestioneProdottoServlet");
-	
+		json.put("status", "success");
+		
 		}catch (NumberFormatException e) {
 			System.err.println ("errore"+e.getMessage());
 			json.put("status", "error");
@@ -117,8 +199,11 @@ public class GestioneProdottoServlet extends HttpServlet {
 			json.put("status", "error");
 			json.put("message", "errore del server");
 		}
+		
+		
 		return json;
 	}
+	
 	
 	private void eliminaProdotto(HttpServletRequest request) throws SQLException {
 		dao.doDelete(Integer.parseInt(request.getParameter("codice")));
@@ -137,6 +222,9 @@ public class GestioneProdottoServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
@@ -161,17 +249,24 @@ public class GestioneProdottoServlet extends HttpServlet {
 		try {
 		if ("aggiungi".equalsIgnoreCase(action)) {
 			json = aggiungiProdotto(request, response);
-			
-			json.put("status","success");
+	
 			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
 		}
 		
 		else if ("delete".equalsIgnoreCase(action)) {
 			eliminaProdotto(request);
+		
 			json.put("status","success");
 			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
 		}
-		else {
+		
+		else if ("modifica".equalsIgnoreCase(action)) {
+			json= modificaProdotto(request, response);
+			
+			json.put("status", "success");
+			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
+		}
+		else  {
 			json.put("status", "error");
 			json.put("message", "azione non riconosciuta");
 		}

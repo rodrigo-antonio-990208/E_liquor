@@ -43,15 +43,21 @@ for (Prodotto p: lista){
 			
 			<div class = "dati-prodotto">		
 			<p>Nome: <%=p.getNome() %></p>
-	
+			
+			
+			<div class = "quantita-controll">
+			<button type = "button" onclick= "clickDecrementa(<%=p.getIdProdotto ()%>)">-</button>
 			<p>Quantità: <%=carrello.getQuantitaProd(p.getIdProdotto()) %> </p>
-	
+			 <button type = "button" onclick= "clickIncrementa(<%=p.getIdProdotto()%>)">+</button>
+			</div>
+			
+			
 			<p>Prezzo: <%=p.getPrezzo()%> €</p>
 		
 			</div>
 	</div>
 	
-	<button onclick = "rimuoviCarrello(<%=p.getIdProdotto() %>)">Elimina dal carrello</button>
+	<button onclick = "eliminaProdotto(<%=p.getIdProdotto() %>)">Elimina dal carrello</button>
 <%} 
 }%>
 
@@ -60,11 +66,13 @@ for (Prodotto p: lista){
 <div class = "totale-box">
 <h3>Totale Carrello</h3><br>
 <h2><%=carrello.getPrezzoTotale() %></h2>
+
 </div>
 
 
 <hr>
 
+<button type = "button" onclick ="rimuoviCarrello()">Rimuovi Tutti i Prodotti Dal Carrello</button>
 <button id = "checkoutBtn" onclick = "mostraCheckout()">Procedi All'acquisto</button>
 	 
 <div id = "contenitoreCheckout" style = "display : none;">

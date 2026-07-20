@@ -223,6 +223,28 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			}
 			return q;
 		}
+	
+		
+	public void doUpdate (Prodotto prod) throws SQLException{
+			String sql = "UPDATE " +TABLE_NAME+" SET nome = ?, descrizione = ?, prezzo = ?, quantita = ?, gradazione = ?, formato = ?, idCategoria = ?, attivo = ? WHRE idProdotto = ?";
+			
+			try(Connection conn = ds.getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)){
+				
+				ps.setString(1,prod.getNome());
+				ps.setString(2, prod.getDescrizione());
+				ps.setFloat(3, prod.getPrezzo());
+				ps.setInt(4, prod.getQuant());
+				ps.setFloat(5,prod.getGradazione());
+				ps.setInt(6, prod.getFormato());
+				ps.setString(7,prod.getIdCategoria());
+				ps.setBoolean(8, prod.isAttivo());
+				
+				ps.executeUpdate();
+				
+			}
+			
+		}
 
 
 }

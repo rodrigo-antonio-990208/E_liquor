@@ -44,8 +44,15 @@
 	<p class = "prod-prezzo">${prod.prezzo} €</p>
 	
 </a>
+
 	<%if (utente != null && utente.getRuolo().equalsIgnoreCase("user")){ %>
 	<button onclick = "aggiungiCarrello(${prod.idProdotto})">Aggiungi al carrello</button>
+	
+
+	<%}else if (utente!= null && utente.getRuolo().equalsIgnoreCase("admin")){ %>
+	<button onclick = "deleteProdotto(${prod.idProdotto})">Elimina Prodotto</button>
+	<a href = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet?action=read&codice=${prod.idProdotto}" class= "btn-tabella-modifica">Modifica Prodotto</a>
+	
 	 <%} else if (utente == null){ %>
  
 	<button onclick = "avvisoRegistrazione()">Aggiungi al Carrello</button>
@@ -58,7 +65,9 @@
 
 <jsp:include page= "footer.jsp"/>
 
-<script src = "scripts/aggiungiCarrello.js"></script>
+<script src = "${pageContext.request.contextPath}/scripts/aggiungiCarrello.js"></script>
+<script src = "${pageContext.request.contextPath}/scripts/gestione.js"></script>
+
 
 </body>
 </html>

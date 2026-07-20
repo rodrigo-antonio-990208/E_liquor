@@ -75,14 +75,44 @@ function aggiungiCarrello(codice){
 
 
 
-function rimuoviCarrello(codice){
-	var params = "action=deleteC&codice="+encodeURIComponent(codice);
+function rimuoviCarrello(){
+	if (confirm("sei sicuro di voler svuotare il carrello ?")){
 	
+	var params = "action=deleteC";
 	loadAjaxDoc(contextPath+"/catalogo", "GET", params,function(request){ 
 			
 		handleCarrello(request);
 		setTimeout(function(){location.reload();},1000);});	
 		
+}}
+
+function clickIncrementa(codice){
+	var params = "action=incrementa&codice="+encodeURIComponent(codice);
+	
+		loadAjaxDoc(contextPath+"/catalogo", "GET", params,function(request){ 
+				
+			handleCarrello(request);
+			setTimeout(function(){location.reload();},1000);});	
+			
+	}
+
+
+function clickDecrementa(codice){
+	var params = "action=decrementa&codice="+encodeURIComponent(codice);
+		
+			loadAjaxDoc(contextPath+"/catalogo", "GET", params,function(request){ 
+					
+				handleCarrello(request);
+				setTimeout(function(){location.reload();},1000);});	
+}
+
+
+function eliminaProdotto(codice){
+	var params = "action=aggiornaCarrello&codice="+encodeURIComponent(codice);
+	loadAjaxDoc(contextPath+"/catalogo", "GET", params,function(request){ 
+						
+					handleCarrello(request);
+					setTimeout(function(){location.reload();},1000);});	
 }
 
 
