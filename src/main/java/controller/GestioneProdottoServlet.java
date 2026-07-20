@@ -33,6 +33,8 @@ public class GestioneProdottoServlet extends HttpServlet {
 		dao = new ProdottoDaoImpl(ds);
 	}
 	
+	
+	
 	private void  processAction (HttpServletRequest request) throws  ServletException{
 		String action = request.getParameter("action");
 		try {
@@ -41,6 +43,9 @@ public class GestioneProdottoServlet extends HttpServlet {
 		 if (action.equalsIgnoreCase("read")) {
 				leggiProdotto(request);
 			}
+		 else if ("delete".equalsIgnoreCase(action)) {
+			 eliminaProdotto(request);
+		 }
 		}
 	}catch (SQLException e) {
 		System.err.println("error: "+e.getMessage());
@@ -48,7 +53,8 @@ public class GestioneProdottoServlet extends HttpServlet {
 	
 
 	
-	private JSONObject aggiungiProdotto (HttpServletRequest request)throws SQLException {
+	private JSONObject aggiungiProdotto (HttpServletRequest request , HttpServletResponse response)throws SQLException {
+	
 		JSONObject json = new JSONObject();
 		Prodotto prod = new Prodotto ();
 		
@@ -99,8 +105,8 @@ public class GestioneProdottoServlet extends HttpServlet {
 		prod.setAttivo(true);
 		dao.doSave(prod);		
 		
-		json.put("status", "success");
-		json.put("redirect",request.getContextPath()+"/GestioneProdottoServlet");
+		
+		json.put("redirect",request.getContextPath()+"/admin/GestioneProdottoServlet");
 	
 		}catch (NumberFormatException e) {
 			System.err.println ("errore"+e.getMessage());
@@ -147,19 +153,23 @@ public class GestioneProdottoServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		JSONObject json = new JSONObject ();
+		
 		response.setContentType("application/json");
 		
 		String action = request.getParameter("action");
+		
 		try {
 		if ("aggiungi".equalsIgnoreCase(action)) {
-			json = aggiungiProdotto(request);
+			json = aggiungiProdotto(request, response);
 			
+			json.put("status","success");
+			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
 		}
 		
 		else if ("delete".equalsIgnoreCase(action)) {
 			eliminaProdotto(request);
 			json.put("status","success");
-			json.put("redirect", request.getContextPath()+"/GestioneProdottoServlet");
+			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
 		}
 		else {
 			json.put("status", "error");

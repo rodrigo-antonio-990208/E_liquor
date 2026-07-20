@@ -81,7 +81,7 @@ public class OrdineBean implements Serializable  {
 		ordineAcquistato = dett;
 	}
 	
-	public List<DettagliOrdineBean> getAcquisto (){
+	public List<DettagliOrdineBean> getOrdineAcquistato (){
 		return ordineAcquistato;
 	}
 }

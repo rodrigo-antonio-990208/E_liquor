@@ -1,8 +1,8 @@
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-   <%@ page contentType= "text/html ; charset=UTF-8" import ="model.Prodotto" %> 
+    pageEncoding="UTF-8" import ="model.Prodotto"%>
+  
     <%@taglib prefix = "c" uri= "jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
@@ -43,7 +43,7 @@ vertical-align: top; }
 <p>${prod.formato} ml</p>
 <p>${prod.prezzo} €</p>
 <a href = "GestioneProdottoServlet?action=read&codice=${prod.idProdotto}"><button>Dettagli</button></a>
-<a href = "GestioneProdottoServlet?action=delete&codice=${prod.idProdotto}"><button>Elimina Prodotto</button></a>
+<button type ="button" onclick = "deleteProdotto(${prod.idProdotto})">Elimina Prodotto</button>
  
  </div>
 </c:forEach>
@@ -62,6 +62,7 @@ if (prod != null){
 <p><%=prod.getDescrizione()%></p>
 <p><%=prod.getFormato()%> ml</p>
 <p><%=prod.getPrezzo()%> €</p>
+<p><%=prod.getQuant()%></p>
 
 </div>
 
@@ -81,8 +82,10 @@ if (prod != null){
 <div>
 <h2>Aggiungi Prodotto</h2>
 
-<form action = "GestioneProdottoServlet" method ="post">
+<form id="formAggiungi" action = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet" method ="post" >
 <input type ="hidden" name ="action" value ="aggiungi">
+
+<div id = "gestione-error"></div>
 
 <label>Nome Prodotto:</label>
 <input type = "text" name = "nome" placeholder = "inserisci nome prodotto" required>
@@ -115,6 +118,8 @@ if (prod != null){
 </form></div>
 
 <jsp:include page= "footer.jsp"/>
+
+<script src = "${pageContext.request.contextPath}/scripts/gestione.js"></script>
 
 </body>
 </html>

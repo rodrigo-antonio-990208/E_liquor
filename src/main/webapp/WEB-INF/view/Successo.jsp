@@ -2,12 +2,23 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
+<link rel ="stylesheet" type = "text/css" href = "${pageContext.request.contextPath}/styles/style.css">
 <title>Successo Checkout</title>
+
 </head>
 <body>
-<h1>Checkout avvenuto con successo</h1>
-<a href= "${pageContext.request.contextPath}/"><button  class = "backHome">Torna all home</button></a>
+
+<jsp:include page ="header.jsp"/>
+
+<div class ="successo-container">
+	
+	<h1>Checkout avvenuto con successo !</h1>
+	<p>Grazie per il tuo acquisto.</p>
+	<a href= "${pageContext.request.contextPath}/catalogo"><button  class = "backHome">Torna all home</button></a>
+	
+</div>
 </body>
 </html>

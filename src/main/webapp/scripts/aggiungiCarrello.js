@@ -11,7 +11,7 @@ try{
 		try{
 			request = new ActiveXObject("Microsoft.XMLHTTP");
 		}catch (e){
-			document.getElementById("error-container").innerHTML = "il browser non supporta ajax";
+			document.getElementById("actionC").innerHTML = "il browser non supporta ajax";
 			return null;
 		}
 	}
@@ -30,9 +30,9 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 				cFunzioni(this);
 			}else{
 				if (this.status == 0){
-					document.getElementById("error-container").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
+					document.getElementById("actionC").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
 				}else {
-					document.getElementById("error-container").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
+					document.getElementById("actionC").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
 				}
 				return null;
 			}
@@ -66,25 +66,51 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 }
 }
 
+
 function aggiungiCarrello(codice){
 	var params = "action=addC&codice="+encodeURIComponent(codice);
 	
 	loadAjaxDoc(contextPath+"/catalogo","GET", params, handleCarrello);
 }
 
+
+
 function rimuoviCarrello(codice){
 	var params = "action=deleteC&codice="+encodeURIComponent(codice);
 	
-	loadAjaxDoc(contextPath+"/catalogo", "GET", params,handleCarrello);
+	loadAjaxDoc(contextPath+"/catalogo", "GET", params,function(request){ 
+			
+		handleCarrello(request);
+		setTimeout(function(){location.reload();},1000);});	
+		
+}
+
+
+function avvisoRegistrazione(){
+	var box = document.getElementById("actionC");
+	var avviso = "Per proseguire all'acquisto, <a href = 'Login'>accedi</a> o <a href = 'Registrazione'> registrati </a>";
+
+	box.innerHTML=avviso;
+	setTimeout(function(){
+		box.innerHTML = "";
+	}, 5000);	
+
 }
 
 function handleCarrello(request){
 	var response = JSON.parse(request.responseText);
+	var box = document.getElementById("actionC");
 	
 	if (response.status === "success"){
-		document.getElementById("actionC").innerHTML = response.message;
+		
+		box.innerHTML = response.message;
+		
+		setTimeout (function(){
+			box.innerHTML = "";
+		},3000);
+	
 	}
 	else {
-		document.getElementById("actionC").innerHTML= "problema con aggiunta/rimozione prodotti";
+		box.innerHTML= "problema con aggiunta/rimozione prodotti";
 	}
 }

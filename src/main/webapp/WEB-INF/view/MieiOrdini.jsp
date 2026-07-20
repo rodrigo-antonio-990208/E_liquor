@@ -13,7 +13,7 @@
 <div>
 <h1>I MIEI ORDINI</h1>
 <% List<OrdineBean> ordine = (List<OrdineBean>) request.getAttribute ("ordini"); 
-if (ordine != null){
+if (ordine != null && !ordine.isEmpty()){
 %>
 <table class= "mieiOrdini">
 <tr>

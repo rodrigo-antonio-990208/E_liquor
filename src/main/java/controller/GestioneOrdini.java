@@ -62,7 +62,7 @@ public class GestioneOrdini extends HttpServlet {
 	}
 		
 		
-	RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/view/gestioneOrdiniAdmin.jsp");
+	RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/view/VistaOrdiniAdmin.jsp");
 	disp.forward(request, response);
 	
 	}

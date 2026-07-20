@@ -28,9 +28,9 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 				cFunzioni(this);
 			}else{
 				if (this.status == 0){
-					document.getElementById("error-container").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
+					document.getElementById("checkError").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
 				}else {
-					document.getElementById("error-container").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
+					document.getElementById("checkError").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
 				}
 				return null;
 			}
@@ -122,7 +122,8 @@ function checkout(){
 	}
 	
 	var params = "paese="+encodeURIComponent(paese.trim())+"&citta="+encodeURIComponent(citta.trim())+"&via="+encodeURIComponent(via.trim())+"&cap="+encodeURIComponent(cap.trim())+"&provincia="+encodeURIComponent(provincia.trim())+"&pagamento="+encodeURIComponent(pagamento.trim());
-	loadAjaxDoc(contextPath+"/CheckoutServlet","POST",params,handleCheckout)
+	
+	loadAjaxDoc(contextPath+"/common/CheckoutServlet","POST",params,handleCheckout)
 }
 
 function handleCheckout(request){

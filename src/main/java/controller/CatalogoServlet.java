@@ -37,6 +37,8 @@ public void init (ServletConfig servletConfig) throws ServletException{
 	dao = new ProdottoDaoImpl(ds);
 }
 
+
+
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 	
@@ -53,7 +55,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	
 	request.setAttribute("carrello", cart);
 	
-	if (action != null && (action.equalsIgnoreCase("addC") || action.equalsIgnoreCase("deleteC"))) {
+	if (action != null && ("addC".equalsIgnoreCase(action) || "deleteC".equalsIgnoreCase(action))) {
 		
 		response.setContentType("application/json");
 		JSONObject json = new JSONObject ();
@@ -62,7 +64,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	
 		json.put("status","success");
 	
-		if(action.equalsIgnoreCase("addC")) {
+		if("addC".equalsIgnoreCase(action)) {
 		
 			json.put("message", "Aggiunto al carrello");
 			}
@@ -71,14 +73,21 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 			}
 	
 		out.write(json.toString());
+		
+		out.flush();
+		out.close();
 		return;
 		}
 	
 	
+	if ("vediCarrello".equalsIgnoreCase(action)) {
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/vistaCarrello.jsp");
+		dispatcher.forward(request, response);
+		return;
+	}
 	
-		
-	if (action.equalsIgnoreCase("vediCarrello")) {
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaCarrello.jsp");
+	if ("read".equalsIgnoreCase(action)) {
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/dettagliProdotto.jsp");
 		dispatcher.forward(request, response);
 		return;
 	}
@@ -93,13 +102,13 @@ private void processAction (HttpServletRequest request, CarrelloBean cart) {
 String action = request.getParameter ("action");
 try {
 	if (action != null) {
-		if (action.equalsIgnoreCase("addC")) {
+		if ("addC".equalsIgnoreCase(action)) {
 			aggiungiCarrello (request, cart);
 		}
-		else if (action.equalsIgnoreCase("deleteC")) {
+		else if ("deleteC".equalsIgnoreCase(action)) {
 			rimuoviCarrello(request, cart);
 		}
-		else if (action.equalsIgnoreCase("read")) {
+		else if ("read".equalsIgnoreCase(action)) {
 			leggiProdotto(request);
 			}
 	

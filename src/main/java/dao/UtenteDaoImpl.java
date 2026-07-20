@@ -99,6 +99,7 @@ public UtenteBean doRetrieveByMail(String email) throws SQLException{
 		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
 			try(Connection conn = ds.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)){
+				System.out.println("====== ATTENZIONE =====> JAVA STA USANDO IL DATABASE: " + conn.getMetaData().getURL());
 					ps.setString(1, email);
 					ps.setString(2, password);
 					try (ResultSet result = ps.executeQuery()){

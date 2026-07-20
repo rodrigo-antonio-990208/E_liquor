@@ -9,7 +9,7 @@ try{
 		try{
 			request = new ActiveXObject("Microsoft.XMLHTTP");
 		}catch (e){
-			document.getElementById("error-container").innerHTML = "il browser non supporta ajax";
+			document.getElementById("gestioneAdmin-error").innerHTML = "il browser non supporta ajax";
 			return null;
 		}
 	}
@@ -28,9 +28,9 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 				cFunzioni(this);
 			}else{
 				if (this.status == 0){
-					document.getElementById("error-container").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
+					document.getElementById("gestioneAdmin-error").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
 				}else {
-					document.getElementById("error-container").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
+					document.getElementById("gestioneAdmin-error").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
 				}
 				return null;
 			}

@@ -1,25 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import = "model.UtenteBean"  %>
+    
     <%@taglib prefix = "c" uri= "jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel = "stylesheet" type="text/css" href ="${pageContext.request.contextPath}/styles/style.css">
+
+
 <title>Catalogo lista liquori</title>
 
-<style >
-.prodotto_card {border: 1px solid;
-padding: 15px;
-width: 200px;    									//RICORDA DI METTERE QUESTO DENTOR UN FOGLIO DI STILE CSS
-display: inline-block;
-vertical-align: top; }
-</style>
 
 </head>
 <body>
+
+<% UtenteBean utente = (UtenteBean) request.getSession().getAttribute("utente");  %>
+
 <jsp:include page = "header.jsp" />
 
-<div class= "actionC"></div>
+<div id= "actionC"></div>
 
 <div class="sort">
 <h3>Ordina Prodotti Per:</h3>
@@ -29,23 +29,36 @@ vertical-align: top; }
 </div>
 
 
-
+<div class = "prodotto-grid">
 <c:forEach items = "${prodotti}" var= "prod">
 
-<div class = "prodotto_card">
+	<div class = "prodotto_card">
 
-<img src = "Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
+<a href = "catalogo?action=read&codice=${prod.idProdotto}">
+	
+	<img src = "Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
 
-<h3>${prod.nome}</h3>
-<p>${prod.descrizione}</p>
-<p>${prod.formato} ml</p>
-<p>${prod.prezzo} €</p>
-<button onclick = "aggiungiCarrello(${prod.idprodotto})">Aggiungi al carrello</button>
+	<h3>${prod.nome}</h3>
+
+	<p class = "prod-formato">${prod.formato} ml</p>
+	<p class = "prod-prezzo">${prod.prezzo} €</p>
+	
+</a>
+	<%if (utente != null && utente.getRuolo().equalsIgnoreCase("user")){ %>
+	<button onclick = "aggiungiCarrello(${prod.idProdotto})">Aggiungi al carrello</button>
+	 <%} else if (utente == null){ %>
  
- </div>
+	<button onclick = "avvisoRegistrazione()">Aggiungi al Carrello</button>
+ 
+	 <%} %>
+ 	</div>
+ 
 </c:forEach>
+</div>
 
 <jsp:include page= "footer.jsp"/>
+
 <script src = "scripts/aggiungiCarrello.js"></script>
+
 </body>
 </html>

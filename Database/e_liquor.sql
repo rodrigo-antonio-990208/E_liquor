@@ -64,7 +64,7 @@ FOREIGN KEY (id_ordine) REFERENCES ordine (id_ordine) ON DELETE CASCADE
 
 
 
+INSERT INTO utente (nome, cognome, email, password, ruolo) VALUES ("Rodrigo", "Masullo", "admin", "ciao12", "admin");
 
-
-INSERT INTO prodotto (nome, descrizione, prezzo_attuale, quantita_disponibile, gradazione, formato) VALUES 
-("beefeater", "ciao", 10.00, 3, 12.00, 70);
+INSERT INTO prodotto (nome, descrizione, prezzo_attuale, quantita_disponibile, gradazione, formato, id_categoria) VALUES 
+("beefeater", "ciao", 10.00, 3, 12.00, 70,"gin");

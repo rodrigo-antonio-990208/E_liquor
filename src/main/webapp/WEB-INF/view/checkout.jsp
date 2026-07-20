@@ -4,7 +4,7 @@
     <div class = checkout-section>
     <h3>Dati di spedizione e di pagamento</h3>
     
-    <div id = checkError></div>
+    <div id = "checkError"></div>
     
     <form id = "formCheckout"  onsubmit = "event.preventDefault() ; checkout()" >
     <label for = "paese">Paese:</label>
@@ -24,8 +24,11 @@
     
     <label for = "pagamento">Metodo di Pagamento:</label>
     <select id ="pagamento" name = "pagamento"> 
+    
     <option value = "">Seleziona</option>
+    
     <option value ="carta">Carta Di Credito</option>
+    
     <option value = "contrassegno">Contrassegno</option>
     </select>
     

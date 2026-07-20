@@ -11,7 +11,7 @@ try{
 		try{
 			request = new ActiveXObject("Microsoft.XMLHTTP");
 		}catch (e){
-			document.getElementById("error-container").innerHTML = "il browser non supporta ajax";
+			document.getElementById("gestione-error").innerHTML = "il browser non supporta ajax";
 			return null;
 		}
 	}
@@ -30,9 +30,9 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 				cFunzioni(this);
 			}else{
 				if (this.status == 0){
-					document.getElementById("error-container").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
+					document.getElementById("gestione-error").innerHTML = "problemi nella richiesta : nessuna risposta ricevuta nel tempo limite";
 				}else {
-					document.getElementById("error-container").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
+					document.getElementById("gestione-error").innerHTML = "problemi nell'esecuzione della richiesta"+this.statusText;
 				}
 				return null;
 			}
@@ -84,11 +84,12 @@ function validaTesto (campo, regex, errorMex){
 	}
 }
 
-window.onload = function(){
+document.addEventListener("DOMContentLoaded", function(){
 	var form = document.getElementById("formAggiungi");
 	
 	if (form){
-	
+	form.addEventListener("submit", aggiungiProdotti);
+		
 	form.nome.addEventListener("change", function (){validaTesto(this, regexTesto, "il campo Nome non è valido" );});
 	form.descrizione.addEventListener("change",function(){validaTesto(this, regexTesto,"il campo Descrizione non è valido");});
 	form.prezzo.addEventListener("change",function(){validaTesto(this, regexPrezzo,"inserire campo Prezzo con valori decimali");});
@@ -97,7 +98,7 @@ window.onload = function(){
 	form.quantita.addEventListener("change", function(){validaTesto(this, regexInteroPositivo,"inserire campo Quantità con valori interi");})
 	form.categoria.addEventListener("change", function(){validaTesto(this,regexTesto, "inserire campo categoria");});
 }
-};
+});
 
 
 function aggiungiProdotti(event){
@@ -114,7 +115,7 @@ function aggiungiProdotti(event){
 	if (!regexTesto.test(form.nome.value)){errori.push("riempire correttamente il campo Nome");}
 	if (!regexTesto.test(form.descrizione.value)){errori.push("riempire correttamente il campo Descrizione");}
 	if (!regexPrezzo.test(form.prezzo.value)){errori.push("riempire correttamente il campo Prezzo");}
-	if (!regexInteroPositivo.test(form.gradazione.value)){errori.push("riempire correttamente il campo Gradazione");}
+	if (!regexPrezzo.test(form.gradazione.value)){errori.push("riempire correttamente il campo Gradazione");}
 	if (!regexInteroPositivo.test(form.formato.value)){errori.push("riempire correttamente il campo Formato");}
 	if (!regexInteroPositivo.test(form.quantita.value)){errori.push("riempire correttamente il campo Quantità");}
 	if (!regexTesto.test(form.categoria.value)){errori.push("inserire categoria");}
@@ -147,9 +148,10 @@ function handleAggiungi(request){
 
 
 function deleteProdotto(codice){
+	if(confirm ("sicuro di voler eliminare questo prodotto ?")){
 	var del = "action=delete&codice="+encodeURIComponent(codice);
 	loadAjaxDoc(contextPath+"/admin/GestioneProdottoServlet","POST",del,HandledeleteProdotto);
-}
+}}
 
 
 

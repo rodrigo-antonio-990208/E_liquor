@@ -37,7 +37,13 @@ public class Login extends HttpServlet {
 		}
 		dao = new UtenteDaoImpl(ds);
 	}
-
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	RequestDispatcher dis = getServletContext().getRequestDispatcher("/WEB-INF/view/Login.jsp");
+	dis.forward(request, response);
+	}
+	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	response.setContentType ("application/json");
 	PrintWriter out = response.getWriter();
@@ -89,6 +95,8 @@ public class Login extends HttpServlet {
 		
 		out.print(json.toString());
 	}
+	
+	
 
 	
 	public static String toDigest (String password) {

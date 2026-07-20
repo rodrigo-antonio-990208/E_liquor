@@ -11,29 +11,41 @@
 
 <jsp:include page = "header.jsp"/>
 
+<div class = "registrazione-container">
+<div class= "registrazione-box">
+
+<h1>Registrati </h1>
 
 <div id = "registrazioneError"></div>
 
-<h1>Registrati</h1>
-<form id = "formRegistrazione" onsubmit= "registarti(event)">
+
+<form id = "formRegistrazione" onsubmit= "registrati(event)">
 
 
 
-<fieldset>
-<label for = "nome">Nome:</label>
-<input type = "text"  id = "nome "name = "nome" placeholder = "Inserisci nome" >
-<label for ="cognome">Cognome:</label>
-<input type = "text" id= "cognome" name = "cognome" placeholder = "Inserisci cognome">
-<label for = "username">Email (username):</label>
-<input type = "text" id="username" name = "username" placeholder = "Inserisci email">
-<label for ="password">Password:</label>
-<input type = "password" id="password" name = "password" placeholder = "Inserisci password">
+  <fieldset>
+  
+  	<legend>Dati Personali</legend>
 
-<input type = "submit" value ="Registrati">
-<input type = "reset" value = "Reset">
-</fieldset>
+	<label for = "nome">Nome:</label>
+	<input type = "text"  id = "nome" name = "nome" placeholder = "Inserisci nome" >
+	<label for ="cognome">Cognome:</label>
+	<input type = "text" id= "cognome" name = "cognome" placeholder = "Inserisci cognome">
+	<label for = "username">Email (username):</label>
+	<input type = "text" id="username" name = "username" placeholder = "Inserisci email">
+	<label for ="password">Password:</label>
+	<input type = "password" id="password" name = "password" placeholder = "Inserisci password">
+	
+	<div class= "form-buttons">
+		<input class ="btn-submit" type = "submit" value ="Registrati">
+		<input class ="btn-reset" type = "reset" value = "Reset">
+	</div>
+	
+  </fieldset>
 
 </form>
+</div>
+</div>
 
 <jsp:include page = "footer.jsp"/>
 

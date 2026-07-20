@@ -1,19 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ page import = "model.UtenteBean" %>
+    pageEncoding="UTF-8" import = "model.UtenteBean"%>
+  
+<meta charset="UTF-8">
+<link rel = "stylesheet" type="text/css" href ="${pageContext.request.contextPath}/styles/style.css">  
 <%
+
+
 UtenteBean utente = (UtenteBean) request.getSession().getAttribute("utente");
 String ruolo = "";
 if (utente != null){
  ruolo = utente.getRuolo();
 }%>
-<header>
+
+<header class = "headerMain">
+
 <script>const contextPath = "${pageContext.request.contextPath}"
 </script>
-<div class = "nav_container">
-<div>
-*/ aggiungere immagine */</div>
-<nav>
+
+<div class= "tab-logo"><a href = "${pageContext.request.contextPath}/catalogo">E - <span >Liquor</span></a>	</div>
+
+
+<div class = "parte-superiore">      		
+
+<div class = "testo-superiore">Premium Lounge Experience</div>
+
+ <!-- FOTO  -->
+ 
+<nav class = "navigatore">
 <ul>
 <li><a href = "${pageContext.request.contextPath}/catalogo"> HOME</a></li>
 <li><a href = "${pageContext.request.contextPath}/catalogo?categoria=gin">GIN</a></li>
@@ -22,8 +35,8 @@ if (utente != null){
 <li><a href = "${pageContext.request.contextPath}/catalogo?categoria=liquori">LIQUORI</a></li>
 
 <%if (utente == null){ %>
-<li><a href = "${pageContext.request.contextPath}/index">ACCEDI</a></li>
-<li><a href = "${pageContext.request.contextPath}/Registrazione">REGISTRATI</a></li>
+<li><a href = "${pageContext.request.contextPath}/index" class ="bottone-accedi">ACCEDI</a></li>
+<li><a href = "${pageContext.request.contextPath}/Registrazione" class = "bottone-registrati">REGISTRATI</a></li>
 
 <%} %>
 
@@ -45,7 +58,7 @@ if (utente != null){
 	<% } %>
 	
 </ul></nav>
+</div>
 
- </div>
 
 </header>
