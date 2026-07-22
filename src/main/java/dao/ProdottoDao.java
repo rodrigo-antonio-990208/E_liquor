@@ -2,6 +2,8 @@ package dao;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
+
 import model.Prodotto;
 
 public interface ProdottoDao {
@@ -21,4 +23,6 @@ public interface ProdottoDao {
 	public void decrementaQuantità (int quant, int codice)throws SQLException;
 
 	public void doUpdate (Prodotto codice) throws SQLException;
+	
+	public List<Prodotto> doRetrieveByNome (String nome) throws SQLException;
 }

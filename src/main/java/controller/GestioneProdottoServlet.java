@@ -113,7 +113,7 @@ public class GestioneProdottoServlet extends HttpServlet {
 		dao.doUpdate(prod);		
 		
 		
-		json.put("redirect",request.getContextPath()+"/admin/GestioneProdottoServlet");
+		json.put("redirect",request.getContextPath()+"/catalogo");
 		json.put("status", "success");
 		
 		}catch (NumberFormatException e) {
@@ -175,7 +175,6 @@ public class GestioneProdottoServlet extends HttpServlet {
 		}
 		
 		
-		
 		prod.setNome(nome);
 		prod.setDescrizione(descrizione);
 		prod.setPrezzo(price);
@@ -229,7 +228,6 @@ public class GestioneProdottoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		
-		
     	processAction(request);
 		
 		loadProductPage(request);
@@ -237,6 +235,11 @@ public class GestioneProdottoServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/GestioneProdotto.jsp");
 		dispatcher.forward(request, response);
 	}
+    
+    
+    
+    
+    
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
@@ -250,7 +253,7 @@ public class GestioneProdottoServlet extends HttpServlet {
 		if ("aggiungi".equalsIgnoreCase(action)) {
 			json = aggiungiProdotto(request, response);
 	
-			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
+			
 		}
 		
 		else if ("delete".equalsIgnoreCase(action)) {
@@ -261,11 +264,10 @@ public class GestioneProdottoServlet extends HttpServlet {
 		}
 		
 		else if ("modifica".equalsIgnoreCase(action)) {
-			json= modificaProdotto(request, response);
+			json= modificaProdotto(request, response);	
 			
-			
-			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
 		}
+		
 		else  {
 			json.put("status", "error");
 			json.put("message", "azione non riconosciuta");
@@ -276,8 +278,8 @@ public class GestioneProdottoServlet extends HttpServlet {
 			json.put("message", "errore dal server");
 		}
 		
-		out.print(json.toString());
 		
+		out.print(json.toString());
 		
 	}
 

@@ -20,7 +20,7 @@
 <div class ="gestione-box">
 <h2>${empty prodotto ? 'Aggiungi Prodotto' : 'Modifica Prodotto'}</h2>
 
-<form id="formAggiungi" action = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet" method ="post" onsubmit ="aggiungiProdotti(event)" novalidate>
+<form id="formAggiungi" action = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet" method ="post" onsubmit = "aggiungiProdotti(event)" >
 <input type ="hidden" name ="action" value ="${empty prodotto ? 'aggiungi' : 'modifica'}">
 <input type ="hidden" name ="codice" value = "${prodotto.idProdotto}">
 
@@ -32,7 +32,7 @@
 <label>Descrizione:</label>
 <textarea name ="descrizione"  rows="15" cols ="40" placeholder ="inserisci descrizione" required> ${prodotto.descrizione}</textarea><br>
 
-<label>Categoria</label>
+<label>Categoria:</label>
 
 <select name = "categoria">
 <option value ="gin" ${prodotto.idCategoria == 'gin' ? 'selected' : '' }>GIN</option>
@@ -41,13 +41,13 @@
 <option value = "liquori"  ${prodotto.idCategoria == 'liquori' ? 'selected' : '' }>LIQUORI</option>
 </select><br>
 
-<label>Prezzo</label>
+<label>Prezzo:</label>
 <input type = "number" step = "0.01" name = "prezzo" value = "${prodotto.prezzo}" placeholder = "inserisci prezzo" required><label>€</label>
 
-<label>Quantità</label>
+<label>Quantità:</label>
 <input type = "number" min = "0" name = "quantita" value = "${prodotto.quant}" placeholder = "inserisci quantità" required>
 
-<label>Formato </label>
+<label>Formato:</label>
 <input type = "number" min = "0" name ="formato" value = "${prodotto.formato}" placeholder = "inserisci formato" required><label>cl</label>
  
 <label>Gradazione</label>

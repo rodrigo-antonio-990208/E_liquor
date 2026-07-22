@@ -105,6 +105,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	}
 	
 	loadProductList (request);
+	
 	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/view/VistaProdotti.jsp");
 	dispatcher.forward(request, response);
 
@@ -174,12 +175,17 @@ private void aggiornaCarrello(HttpServletRequest request, CarrelloBean cart) thr
 private void loadProductList (HttpServletRequest request) {
 	String sort = request.getParameter("sort");
 	String categoria = request.getParameter("categoria");
+	String ricercaNome = request.getParameter("cercaNome");
 	
 	try {
 		if (categoria != null && !categoria.trim().isEmpty()) {
 			request.setAttribute("prodotti", dao.doRetrieveByCategoria(categoria));  
-			
 		}
+		
+		else if (ricercaNome != null && !ricercaNome.trim().isEmpty()) {
+			request.setAttribute("prodotti", dao.doRetrieveByNome(ricercaNome));
+		}
+		
 		else {
 		request.setAttribute("prodotti", dao.doRetrieveAll(sort));
 		}

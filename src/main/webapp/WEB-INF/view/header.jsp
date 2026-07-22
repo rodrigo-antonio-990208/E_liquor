@@ -25,6 +25,13 @@ if (utente != null){
 <div class = "testo-superiore">Premium Lounge Experience</div>
 
 <a href = "${pageContext.request.contextPath}/catalogo"><img src="${pageContext.request.contextPath}/images/logo.png" alt ="E-Liquor logo" class ="logo-sito"></a>
+
+
+<form action = "${pageContext.request.contextPath}/catalogo" method = "GET" class = "cercaForm">
+<input type = "text" name = "cercaNome" placeholder = "Cosa vuoi bere ?" class = "barra-cerca">
+<button type = "submit" class = "ricerca-btn"> 🔍 </button>
+</form> 
+
  
 <nav class = "navigatore">
 <ul>
@@ -33,9 +40,10 @@ if (utente != null){
 <li><a href = "${pageContext.request.contextPath}/catalogo?categoria=tequila">TEQUILA</a></li>
 <li><a href = "${pageContext.request.contextPath}/catalogo?categoria=whiskey">WHISKEY</a></li>
 <li><a href = "${pageContext.request.contextPath}/catalogo?categoria=liquori">LIQUORI</a></li>
-<li><a href= "${pageContext.request.contextPath}/catalogo?action=vediCarrello">CARRELLO</a></li>
+
 
 <%if (utente == null){ %>
+<li><a href= "${pageContext.request.contextPath}/catalogo?action=vediCarrello">CARRELLO</a></li>
 <li><a href = "${pageContext.request.contextPath}/index" class ="bottone-accedi">ACCEDI</a></li>
 <li><a href = "${pageContext.request.contextPath}/Registrazione" class = "bottone-registrati">REGISTRATI</a></li>
 
@@ -49,8 +57,8 @@ if (utente != null){
 
 
 	<% } else if (ruolo.equalsIgnoreCase("user")){ %>
-
 	
+	<li><a href= "${pageContext.request.contextPath}/catalogo?action=vediCarrello">CARRELLO</a></li>
 	<li><a href = "${pageContext.request.contextPath}/common/MieiOrdini">I MIEI ORDINI</a></li>
 	<li><a href = "${pageContext.request.contextPath}/Logout">LOGOUT</a></li>
 	

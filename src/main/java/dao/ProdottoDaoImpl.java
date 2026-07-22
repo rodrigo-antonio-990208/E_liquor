@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -92,6 +93,42 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			}
 			return bean;
 		}
+		
+		
+		
+		
+		
+		public List<Prodotto> doRetrieveByNome (String nome) throws SQLException{
+			List<Prodotto> lista = new ArrayList<>();
+			String sql = "SELECT * FROM "+ TABLE_NAME+ " WHERE nome LIKE ? AND attivo = true";
+			try (Connection conn = ds.getConnection();
+					PreparedStatement ps = conn.prepareStatement(sql)){
+				ps.setString(1, nome);
+				try(ResultSet rs = ps.executeQuery()){
+					while (rs.next()) {
+						Prodotto prod = new Prodotto();
+						prod.setIdProdotto (rs.getInt("id_prodotto"));
+						prod.setIdCategoria (rs.getString("id_categoria"));
+						prod.setNome (rs.getString("nome"));
+						prod.setAttivo (rs.getBoolean("attivo"));
+						prod.setQuantita(rs.getInt("quantita_disponibile"));
+						prod.setPrezzo(rs.getFloat("prezzo_attuale"));
+						prod.setGradazione(rs.getFloat("gradazione"));
+						prod.setFormato(rs.getInt("formato"));
+						prod.setDescrizione(rs.getString(("descrizione")));
+						prod.setImmagineUrl(rs.getString("immagine_url"));
+						prod.setMimeType(rs.getString("mime_type"));
+						lista.add(prod);
+					}
+				}
+			}
+		return lista;
+		}
+		
+		
+		
+		
+		
 		
 		public synchronized List <Prodotto> doRetrieveAll (String ordine) throws SQLException{
 			List<Prodotto> prodotti = new LinkedList<> ();

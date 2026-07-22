@@ -145,22 +145,17 @@ function handleAggiungi(request){
 	var err = document.getElementById("gestione-error");
 	
 	if (response.status === "success"){
-		
-		err.style.color = "green";
-		            err.innerHTML = "Prodotto aggiunto correttamente";
 		            
 		            setTimeout(function(){
 		                window.location.href = response.redirect;
 		            }, 1000);
 					
 	}else {
-		err.style.color= "red";
 		err.innerHTML = response.message;
 	}
 	
 	}catch(e){
 		console.error("Il server non ha restituito JSON:", request.responseText);
-		        err.style.color = "red";
 		        err.innerHTML = "Errore del server durante l'elaborazione (risposta non valida).";
 		    }
 	}
