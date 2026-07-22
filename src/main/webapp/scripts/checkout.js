@@ -141,6 +141,7 @@ function handleCheckout(request){
 	}
 }}
 
+
 function mostraCheckout(){
 	var btn = document.getElementById("checkoutBtn");
 	var box = document.getElementById("contenitoreCheckout");

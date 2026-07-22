@@ -36,7 +36,7 @@
 
 <a href = "catalogo?action=read&codice=${prod.idProdotto}">
 	
-	<img src = "Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
+	<img src = "${pageContext.request.contextPath}/Immagini?action=show&codice=${prod.idProdotto}" alt= "${prod.nome}" width= "60" height="60">
 
 	<h3>${prod.nome}</h3>
 
@@ -55,7 +55,7 @@
 	
 	 <%} else if (utente == null){ %>
  
-	<button onclick = "avvisoRegistrazione()">Aggiungi al Carrello</button>
+	<button onclick = "avvisoRegistrazione(${prod.idProdotto})">Aggiungi al Carrello</button>
  
 	 <%} %>
  	</div>

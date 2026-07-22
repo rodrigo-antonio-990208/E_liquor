@@ -50,12 +50,13 @@ if (prod != null){
 		<div class = "dett-azioni">
  		<%if (utente != null && utente.getRuolo().equalsIgnoreCase("user")){%>
 
-		<button onclick= "aggiungiCarrello(${prod.idProdotto})">Aggiungi al Carrello</button> 
+		<button onclick= "aggiungiCarrello(${prodotto.idProdotto})">Aggiungi al Carrello</button> 
 		
 		<%}else if (utente!= null && utente.getRuolo().equalsIgnoreCase("admin")){%>
 		
-		<button onclick = "deleteProdotto(${prodotto.idProdotto}})"	>Elimina Prodotto</button>
-		<a href = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet?action=read&codice=${prodotto.idProdotto}">Modifica Prodotto</a>
+		<button onclick = "deleteProdotto(${prodotto.idProdotto})"	>Elimina Prodotto</button>
+		
+		<a href = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet?action=read&codice=${prodotto.idProdotto}" class = "dett-modifica ">Modifica Prodotto</a>
 		
 		<%} else if (utente == null) {%>
 

@@ -1,5 +1,17 @@
 @charset "UTF-8";
 
+
+*{
+	box-sizing: border-box;
+}
+
+
+img{
+	max-width: 100%;
+	height:auto;
+}
+
+
 /* HEADER */
 .headerMain  {
 	background-color: #121212;
@@ -38,22 +50,30 @@ body{
 	letter-spacing: 1px;
 }
 
+
 .tab-logo a span{
 	color: #b37d4e;
 }
 
-.parte-superiore{
+
+.logo-sito{
+	max-height: 150px;
+	width: 150px;
+	margin: 10px 0;
+}
+
+.parte-superiore {
 	background-color: #1a1a1a;
 	border: 2px solid ;
 	margin-top: -2px;
-	min-height: 200px;
+	min-height: auto;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	z-index: 1;
-	padding-bottom: 50px;
+	padding:10px 0;
 	
 }
 
@@ -163,9 +183,14 @@ margin-bottom:15px;
 	background-color: #1e1e1e;
 }
 
-.prodotti-grid{
-	display: grid;
+.prodotto-grid{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
 	gap: 25px;
+	padding:20px;
+	width: 100%;
 	margin-bottom: 40 px;
 }
 
@@ -178,8 +203,23 @@ margin-bottom:15px;
 	flex-direction: column;
 	align-items: center;
 	text-align:center;
+}
+
+.btn-tabella-modifica{
+	display:inline-block;
+	padding:8px 16px;
+	background-color: #2c3e50;
+	color:#ffffff;
+	text-decoration:none;
+	border-radius: 6px;
+	font-weight: bold;
+	font-size: 0.85rem;
+	cursor:pointer;
+	margin-top: 8px;
+	}
 	
-	
+.btn-tabella-modifica{
+	background-color: #f1c40f;
 }
 
 .prodotto_card a {
@@ -287,6 +327,26 @@ margin-bottom:15px;
 	max-height: 400px;
 	object-fit: contain;
 }
+
+	.dett-modifica	{
+    display: inline-block;          
+    padding: 8px 16px;
+    background-color: #2c3e50;      
+    color: #ffffff !important;      
+    text-decoration: none;          
+    border-radius: 6px;            
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dett-modifica{
+	background-color: #f1c40f;
+}
+
+
 
 .dettaglio-right {
 	flex: 1.2;
@@ -541,7 +601,8 @@ margin-bottom:15px;
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
-    display: inline-block;}
+    display: inline-block;
+    }
     
     
     @media (max-width: 768px) {
@@ -875,4 +936,303 @@ margin-bottom:15px;
 	margin-bottom: 20px;
 	text-align: center;
 	font-size: 14px;
+}
+
+
+/*GESTIONE PRODOTTO*/
+
+
+
+.gestione-box{
+	width: 450px;
+	margin: 20px auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	background-color: #f9f9f9;
+}
+
+
+#formAggiungi, .gestione-box{
+	background: transparent;
+	padding: 25px;
+	color: #ffffff;
+	max-width: 500px;
+	margin: 20px auto;
+}
+
+#formAggiungi label{
+	color: #ffffff;
+	display:block;
+	margin-top:10px;
+}
+
+#formAggiungi,
+.gestione-box label,
+.unit-label{
+	display:block;
+	margin-top:12px;
+	font-weight: bold;
+	color:#2c3e50;
+	background-color: black;
+}
+
+.gestione-box input[type = "text"],
+.gestione-box input[type= "number"],
+.gestione-box textarea,
+.gestione-box select{
+	width: 100%
+	padding 60px;
+	margin-top: 4px;
+}
+
+.gestione-box input[type="submit"]{
+	margin-top: 15px;
+	padding: 8px 15px;
+	cursor: pointer;
+}
+
+.gestione-box input[type = "submit"]:hover{
+	background-color: #f1c40f;
+}
+
+.upload-box form{
+	margin-top: 20px;
+	padding:15px;
+	border: 1px dashed #888;
+	background-color: black;
+}
+
+.upload-box input[type="file"].upload-input {
+	color:#ffffff;
+	display: block;
+	margin-bottom: 10px;
+	cursor :pointer;
+	
+}
+
+.upload-box form input[type="submit"].btn-carica-foto{
+	margin-top:10px;
+	padding:8px 15px;
+	cursor:pointer;
+}
+
+.upload-box form input[type="submit"].btn-carica-foto:hover{
+	background-color: #f1c40f;
+}
+
+.btn-annulla{
+	padding:8px 115px;
+	background-color: #e74c3c;
+	color: #ffffff;
+	text-decoration:none;
+	font-weight: bold;
+	cursor:pointer;
+	margin-top:15px;
+	text-align:center;
+	border-radius: 4px;
+}
+
+.btn-annulla:hover{
+	background-color: #c0392b;
+}
+
+
+
+/*CHECKOUT*/
+
+
+
+
+.checkout-section{
+	max-width: 480px;
+	margin:30px auto;
+	padding: 25px;
+	background-color: #1e1e1e;
+	border: 1px solid #333;
+	color: #ffffff;
+}
+
+.checkout-section h3{
+	text-align: center;
+	color: #f1c40f;
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+
+#checkError{
+	color: #e74c3c;
+	font-weight: bold;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+#formCheckout label{
+	display: block;
+	margin-top: 12px;
+	margin-bottom: 4px;
+	font-weight: bold;
+	color: #dddddd;
+	font-size: 0.9rem;
+}
+
+
+#formCheckout input[type="text"],
+#formCheckout  select{
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #444;
+	background-color: #2b2b2b;
+	color: #ffffff;
+	box-sizing: border-box;
+	font-size: 0.95rem;
+}
+
+#formCheckout input[type="submit"]{
+	width: 100%;
+	padding: 12px;
+	margin-top:20px;
+	background-color: #27ae60;
+	color: #ffffff;
+	border:none;
+	border-radius: 4px;
+	font-size: 1rem;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#formCheckout input[type = "submit"]:hover{
+	background-color: #f1c40f;
+}
+
+
+/*footer*/
+
+
+
+
+.simple-footer{
+	background-color: #000000;
+	color: #ffffff;
+	padding: 30px 20px;
+	margin-top: 50px;
+	border-top: 1px solid #222222;
+	font-size: 0.85rem;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.footer-container{
+	max-width: 900px;
+	margin: 0 auto;
+	
+}
+
+
+.footer-container h4{
+	color: #f1c40f;
+	font-size: 1.05rem;
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.footer-nav{
+	margin-bottom: 20px;
+}
+
+.footer-nav a{
+	display: inline-block;
+	padding: 6px 16px;
+	background-color: #222222;
+	text-decoration:none;
+	border-radius: 4px;
+	font-weight: bold;
+	border: 1px solid #444444;
+}
+
+.footer-nav a:hover{
+	background-color: #f1c40f;
+	color: #000000;
+	border-color: #f1c40f;
+}
+
+.footer-text{
+	color: #cccccc;
+	margin-bottom: 10px;
+}
+
+.footer-copyright{
+	margin-top: 15px;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.footer-subtext{
+	font-size: 0.78rem;
+	color: #888888;
+}
+
+
+
+/*contatti*/
+
+
+.contact-box{
+	max-width: 500px;
+	margin: 40px auto;
+	padding: 20px;
+	text-align:center;
+}
+
+.contact-box h1{
+	color: #f1c40f;
+	margin-bottom: 20px;
+}
+
+.info-dettagli{
+	text-align: left;
+	font-size: 1.1rem;
+	line-height: 1.8;
+}
+
+
+@media (max-width: 768px){
+	
+	.parte-superiore{
+	min-height: auto;
+	padding-bottom:0;
+	}
+	
+	.navigatore{
+	position:static;
+	margin-top: 15px;
+	}
+	
+	body{
+	padding: 10px;
+}
+
+
+.contact-box,
+.carrello,
+.registrazione-box,
+.login-box,
+.checkout-section,
+.dettaglio-left{
+	width:100%;
+	max-width:100%;
+}
+
+.prod-dett{
+	flex-direction:column;
+	gap: 20px;
+}
+
+.navigatore ul{
+	flex-direction: column;
+}
+
+h1, .dett-nome{
+	font-size: 1.6rem;
+}
 }

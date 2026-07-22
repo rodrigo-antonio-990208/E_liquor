@@ -257,13 +257,13 @@ public class GestioneProdottoServlet extends HttpServlet {
 			eliminaProdotto(request);
 		
 			json.put("status","success");
-			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
+			json.put("redirect", request.getContextPath()+"/catalogo");
 		}
 		
 		else if ("modifica".equalsIgnoreCase(action)) {
 			json= modificaProdotto(request, response);
 			
-			json.put("status", "success");
+			
 			json.put("redirect", request.getContextPath()+"/admin/GestioneProdottoServlet");
 		}
 		else  {

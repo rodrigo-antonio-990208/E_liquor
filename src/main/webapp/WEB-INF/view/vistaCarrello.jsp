@@ -73,6 +73,8 @@ for (Prodotto p: lista){
 <hr>
 
 <button type = "button" onclick ="rimuoviCarrello()">Rimuovi Tutti i Prodotti Dal Carrello</button>
+
+
 <button id = "checkoutBtn" onclick = "mostraCheckout()">Procedi All'acquisto</button>
 	 
 <div id = "contenitoreCheckout" style = "display : none;">
@@ -88,7 +90,7 @@ if (utente != null  && utente.getRuolo().equalsIgnoreCase("user")){
 
 <a href = "${pageContext.request.contextPath}/index"><button>Effettuare il Login</button></a>
 <h3>Non sei registrato ?</h3>
-<a href = "${pageContext.request.contextPath}/Registrazione"><button>Registarti</button></a>
+<a href = "${pageContext.request.contextPath}/Registrazione"><button>Registati</button></a>
 
 <%}%>
 </div>

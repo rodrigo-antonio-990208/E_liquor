@@ -116,15 +116,30 @@ function eliminaProdotto(codice){
 }
 
 
-function avvisoRegistrazione(){
+function avvisoRegistrazione(idProdotto){
+	
+	var params = "action=addC&codice="+encodeURIComponent(idProdotto);
+	
 	var box = document.getElementById("actionC");
 	var avviso = "Per proseguire all'acquisto, <a href = 'Login'>accedi</a> o <a href = 'Registrazione'> registrati </a>";
+	
+	
+	loadAjaxDoc(contextPath+"/catalogo", "GET", params, function(request){
+		
+		var response = JSON.parse(request.responseText);
+		if (response.status === "success"){
+		box.innerHTML= response.message +" "+ avviso;
 
-	box.innerHTML=avviso;
-	setTimeout(function(){
-		box.innerHTML = "";
-	}, 5000);	
-
+		setTimeout(function(){
+			box.innerHTML = "";
+		}, 5000);
+	}
+	else {
+		box.innerHTML = "problema con l'aggiunta al carrello";
+	}
+		
+	});
+	
 }
 
 function handleCarrello(request){

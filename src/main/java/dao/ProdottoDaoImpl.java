@@ -20,14 +20,21 @@ public class ProdottoDaoImpl implements ProdottoDao {
 		this.ds  = ds;
 	}
 	
+	
 	public synchronized void doSave (Prodotto prod ) throws SQLException {
 		int i = cerca(prod);
 		if (i != -1) {
-			String sql = "UPDATE "+ TABLE_NAME+" SET quantita_disponibile = ? WHERE nome = ?";
+			String sql = "UPDATE "+ TABLE_NAME+" SET nome = ?, descrizione = ?, quantita_disponibile = ?, prezzo_attuale = ?, gradazione = ?, formato = ?, id_categoria = ?, attivo = true WHERE nome = ?";
 			try (Connection conn = ds.getConnection();
 					PreparedStatement ps = conn.prepareStatement(sql)){
-				ps.setInt(1, prod.getQuant()+i);
-				ps.setString(2, prod.getNome());
+				ps.setInt(3, prod.getQuant()+i);
+				ps.setString(1, prod.getNome());
+				ps.setString(2, prod.getDescrizione());
+				ps.setFloat(4, prod.getPrezzo());
+				ps.setFloat(5, prod.getGradazione());
+				ps.setInt(6, prod.getFormato());
+				ps.setString(7, prod.getIdCategoria());
+				ps.setString(8, prod.getNome());
 				ps.executeUpdate();
 			}
 		}
@@ -46,6 +53,9 @@ public class ProdottoDaoImpl implements ProdottoDao {
 			preparedStatement.executeUpdate();
 		}	}	
 	}
+	
+	
+	
 	
 	public synchronized boolean doUpdateImage (Prodotto prod) throws SQLException {
 		String sql = "UPDATE " + TABLE_NAME + " SET immagine_url = ?, mime_type = ? WHERE id_prodotto = ?";
@@ -226,7 +236,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 	
 		
 	public void doUpdate (Prodotto prod) throws SQLException{
-			String sql = "UPDATE " +TABLE_NAME+" SET nome = ?, descrizione = ?, prezzo = ?, quantita = ?, gradazione = ?, formato = ?, idCategoria = ?, attivo = ? WHRE idProdotto = ?";
+			String sql = "UPDATE " +TABLE_NAME+" SET nome = ?, descrizione = ?, prezzo_attuale = ?, quantita_disponibile = ?, gradazione = ?, formato = ?, id_Categoria = ?, attivo = ? WHERE id_Prodotto = ?";
 			
 			try(Connection conn = ds.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)){
@@ -239,6 +249,7 @@ public class ProdottoDaoImpl implements ProdottoDao {
 				ps.setInt(6, prod.getFormato());
 				ps.setString(7,prod.getIdCategoria());
 				ps.setBoolean(8, prod.isAttivo());
+				ps.setInt(9, prod.getIdProdotto());
 				
 				ps.executeUpdate();
 				

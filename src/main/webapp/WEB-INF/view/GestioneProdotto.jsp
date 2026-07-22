@@ -7,31 +7,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>${empty prodotto ? 'Inserisci Nuovo Prodotto' : 'Modifica Prodotto Esistente'}</title>
 
-<style >
-.prodotto_card {border: 1px solid;
-padding: 15px;
-width: 200px;
-display: inline-block;			/*ricoda di inserirlo nel foglio css*/
-vertical-align: top; }
-</style>
-
 </head>
 
-
-
 <body>
+
 <jsp:include page = "header.jsp" />
 
-
-
-
-<div>
+<div class ="gestione-box">
 <h2>${empty prodotto ? 'Aggiungi Prodotto' : 'Modifica Prodotto'}</h2>
 
-<form id="formAggiungi" action = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet" method ="post" >
+<form id="formAggiungi" action = "${pageContext.request.contextPath}/admin/GestioneProdottoServlet" method ="post" onsubmit ="aggiungiProdotti(event)" novalidate>
 <input type ="hidden" name ="action" value ="${empty prodotto ? 'aggiungi' : 'modifica'}">
 <input type ="hidden" name ="codice" value = "${prodotto.idProdotto}">
 
@@ -41,7 +30,7 @@ vertical-align: top; }
 <input type = "text" name = "nome" value ="${prodotto.nome}" placeholder = "inserisci nome prodotto" required>
 
 <label>Descrizione:</label>
-<textarea name ="descrizione"  rows="15" cols ="40" placeholder ="inserisci descrizione" required>"${prodotto.descrizione}"</textarea><br>
+<textarea name ="descrizione"  rows="15" cols ="40" placeholder ="inserisci descrizione" required> ${prodotto.descrizione}</textarea><br>
 
 <label>Categoria</label>
 

@@ -66,7 +66,7 @@ function loadAjaxDoc (url, method, params, cFunzioni){
 }
 }
 
-var regexTesto  = /^[a-zA-Z0-9\s\'\"\,\.\-\è\à\é]+$/;
+var regexTesto  = /^[\s\S]+$/;
 var regexPrezzo = /^\d+(\.\d{1,2})?$/;
 var regexInteroPositivo = /^\d+$/;
 
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	form.descrizione.addEventListener("change",function(){validaTesto(this, regexTesto,"il campo Descrizione non è valido");});
 	form.prezzo.addEventListener("change",function(){validaTesto(this, regexPrezzo,"inserire campo Prezzo con valori decimali");});
 	form.formato.addEventListener("change", function (){validaTesto(this, regexInteroPositivo,"inserire campo Formato con valori interi");})
-	form.gradazione.addEventListener("change", function(){validaTesto(this, regexInteroPositivo,"inserire campo Gradazione con valori interi");})
+	form.gradazione.addEventListener("change", function(){validaTesto(this, regexPrezzo,"inserire campo Gradazione con valori interi");})
 	form.quantita.addEventListener("change", function(){validaTesto(this, regexInteroPositivo,"inserire campo Quantità con valori interi");})
 	form.categoria.addEventListener("change", function(){validaTesto(this,regexTesto, "inserire campo categoria");});
 }
@@ -121,12 +121,13 @@ function aggiungiProdotti(event){
 	if (!regexTesto.test(form.categoria.value)){errori.push("inserire categoria");}
 	
 	if (errori.length > 0){
+		console.warn("invio bloccato per errori", errori)
 		error.innerHTML= errori.join("<br>");
 		return;
 	}
 	
-	var actionValue = form.action.value;
-	var codiceValue = form.codice.value;
+	var actionValue = form.elements["action"].value;
+	var codiceValue = form.elements["codice"].value;
 	
 	var params = "action="+encodeURIComponent(actionValue)+"&codice="+encodeURIComponent(codiceValue)+"&nome="+encodeURIComponent(form.nome.value)+"&descrizione="+encodeURIComponent(form.descrizione.value)+"&prezzo="+encodeURIComponent(form.prezzo.value)+
 		"&gradazione="+encodeURIComponent(form.gradazione.value)+"&formato="+encodeURIComponent(form.formato.value)+"&categoria="+encodeURIComponent(form.categoria.value)+"&quantita="+encodeURIComponent(form.quantita.value);
@@ -139,19 +140,31 @@ function aggiungiProdotti(event){
 
 function handleAggiungi(request){
 	var response = JSON.parse(request.responseText);
+	
+	try{
 	var err = document.getElementById("gestione-error");
 	
 	if (response.status === "success"){
 		
-		err.innerHTML = "Prodotto aggiunto correttamente"
-		
-		setTimeout(function(){
-		window.location.href = response.redirect;},1000);
-		
+		err.style.color = "green";
+		            err.innerHTML = "Prodotto aggiunto correttamente";
+		            
+		            setTimeout(function(){
+		                window.location.href = response.redirect;
+		            }, 1000);
+					
 	}else {
+		err.style.color= "red";
 		err.innerHTML = response.message;
 	}
-}
+	
+	}catch(e){
+		console.error("Il server non ha restituito JSON:", request.responseText);
+		        err.style.color = "red";
+		        err.innerHTML = "Errore del server durante l'elaborazione (risposta non valida).";
+		    }
+	}
+
 
 
 
@@ -167,6 +180,7 @@ function HandledeleteProdotto(request){
 	var response = JSON.parse(request.responseText);
 	var err = document.getElementById("gestione-error");
 	if (response.status ==="success"){
+		
 		window.location.href = response.redirect;
 	
 	}

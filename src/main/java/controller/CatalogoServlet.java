@@ -136,6 +136,7 @@ try {
 		}
 	}catch (SQLException e) {
 	System.err.println ("Errore "+ e.getMessage());
+	
 }}
 
 
